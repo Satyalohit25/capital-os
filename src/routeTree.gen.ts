@@ -9,38 +9,336 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as PlannerRouteImport } from './routes/planner'
+import { Route as HubRouteImport } from './routes/hub'
+import { Route as HistoryRouteImport } from './routes/history'
+import { Route as GoalsRouteImport } from './routes/goals'
+import { Route as ForecastRouteImport } from './routes/forecast'
+import { Route as DebtStrategyRouteImport } from './routes/debt-strategy'
+import { Route as AnalyticsRouteImport } from './routes/analytics'
+import { Route as AdvisorRouteImport } from './routes/advisor'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HubIndexRouteImport } from './routes/hub.index'
+import { Route as HubSavingsRouteImport } from './routes/hub.savings'
+import { Route as HubInvestmentsRouteImport } from './routes/hub.investments'
+import { Route as HubIncomeRouteImport } from './routes/hub.income'
+import { Route as HubDebtsRouteImport } from './routes/hub.debts'
+import { Route as HubCreditRouteImport } from './routes/hub.credit'
+import { Route as HubBillsRouteImport } from './routes/hub.bills'
+import { Route as HubAssetsRouteImport } from './routes/hub.assets'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlannerRoute = PlannerRouteImport.update({
+  id: '/planner',
+  path: '/planner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HubRoute = HubRouteImport.update({
+  id: '/hub',
+  path: '/hub',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GoalsRoute = GoalsRouteImport.update({
+  id: '/goals',
+  path: '/goals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForecastRoute = ForecastRouteImport.update({
+  id: '/forecast',
+  path: '/forecast',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DebtStrategyRoute = DebtStrategyRouteImport.update({
+  id: '/debt-strategy',
+  path: '/debt-strategy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalyticsRoute = AnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdvisorRoute = AdvisorRouteImport.update({
+  id: '/advisor',
+  path: '/advisor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HubIndexRoute = HubIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => HubRoute,
+} as any)
+const HubSavingsRoute = HubSavingsRouteImport.update({
+  id: '/savings',
+  path: '/savings',
+  getParentRoute: () => HubRoute,
+} as any)
+const HubInvestmentsRoute = HubInvestmentsRouteImport.update({
+  id: '/investments',
+  path: '/investments',
+  getParentRoute: () => HubRoute,
+} as any)
+const HubIncomeRoute = HubIncomeRouteImport.update({
+  id: '/income',
+  path: '/income',
+  getParentRoute: () => HubRoute,
+} as any)
+const HubDebtsRoute = HubDebtsRouteImport.update({
+  id: '/debts',
+  path: '/debts',
+  getParentRoute: () => HubRoute,
+} as any)
+const HubCreditRoute = HubCreditRouteImport.update({
+  id: '/credit',
+  path: '/credit',
+  getParentRoute: () => HubRoute,
+} as any)
+const HubBillsRoute = HubBillsRouteImport.update({
+  id: '/bills',
+  path: '/bills',
+  getParentRoute: () => HubRoute,
+} as any)
+const HubAssetsRoute = HubAssetsRouteImport.update({
+  id: '/assets',
+  path: '/assets',
+  getParentRoute: () => HubRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/advisor': typeof AdvisorRoute
+  '/analytics': typeof AnalyticsRoute
+  '/debt-strategy': typeof DebtStrategyRoute
+  '/forecast': typeof ForecastRoute
+  '/goals': typeof GoalsRoute
+  '/history': typeof HistoryRoute
+  '/hub': typeof HubRouteWithChildren
+  '/planner': typeof PlannerRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
+  '/hub/assets': typeof HubAssetsRoute
+  '/hub/bills': typeof HubBillsRoute
+  '/hub/credit': typeof HubCreditRoute
+  '/hub/debts': typeof HubDebtsRoute
+  '/hub/income': typeof HubIncomeRoute
+  '/hub/investments': typeof HubInvestmentsRoute
+  '/hub/savings': typeof HubSavingsRoute
+  '/hub/': typeof HubIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/advisor': typeof AdvisorRoute
+  '/analytics': typeof AnalyticsRoute
+  '/debt-strategy': typeof DebtStrategyRoute
+  '/forecast': typeof ForecastRoute
+  '/goals': typeof GoalsRoute
+  '/history': typeof HistoryRoute
+  '/planner': typeof PlannerRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
+  '/hub/assets': typeof HubAssetsRoute
+  '/hub/bills': typeof HubBillsRoute
+  '/hub/credit': typeof HubCreditRoute
+  '/hub/debts': typeof HubDebtsRoute
+  '/hub/income': typeof HubIncomeRoute
+  '/hub/investments': typeof HubInvestmentsRoute
+  '/hub/savings': typeof HubSavingsRoute
+  '/hub': typeof HubIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/advisor': typeof AdvisorRoute
+  '/analytics': typeof AnalyticsRoute
+  '/debt-strategy': typeof DebtStrategyRoute
+  '/forecast': typeof ForecastRoute
+  '/goals': typeof GoalsRoute
+  '/history': typeof HistoryRoute
+  '/hub': typeof HubRouteWithChildren
+  '/planner': typeof PlannerRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
+  '/hub/assets': typeof HubAssetsRoute
+  '/hub/bills': typeof HubBillsRoute
+  '/hub/credit': typeof HubCreditRoute
+  '/hub/debts': typeof HubDebtsRoute
+  '/hub/income': typeof HubIncomeRoute
+  '/hub/investments': typeof HubInvestmentsRoute
+  '/hub/savings': typeof HubSavingsRoute
+  '/hub/': typeof HubIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/advisor'
+    | '/analytics'
+    | '/debt-strategy'
+    | '/forecast'
+    | '/goals'
+    | '/history'
+    | '/hub'
+    | '/planner'
+    | '/reports'
+    | '/settings'
+    | '/hub/assets'
+    | '/hub/bills'
+    | '/hub/credit'
+    | '/hub/debts'
+    | '/hub/income'
+    | '/hub/investments'
+    | '/hub/savings'
+    | '/hub/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/advisor'
+    | '/analytics'
+    | '/debt-strategy'
+    | '/forecast'
+    | '/goals'
+    | '/history'
+    | '/planner'
+    | '/reports'
+    | '/settings'
+    | '/hub/assets'
+    | '/hub/bills'
+    | '/hub/credit'
+    | '/hub/debts'
+    | '/hub/income'
+    | '/hub/investments'
+    | '/hub/savings'
+    | '/hub'
+  id:
+    | '__root__'
+    | '/'
+    | '/advisor'
+    | '/analytics'
+    | '/debt-strategy'
+    | '/forecast'
+    | '/goals'
+    | '/history'
+    | '/hub'
+    | '/planner'
+    | '/reports'
+    | '/settings'
+    | '/hub/assets'
+    | '/hub/bills'
+    | '/hub/credit'
+    | '/hub/debts'
+    | '/hub/income'
+    | '/hub/investments'
+    | '/hub/savings'
+    | '/hub/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdvisorRoute: typeof AdvisorRoute
+  AnalyticsRoute: typeof AnalyticsRoute
+  DebtStrategyRoute: typeof DebtStrategyRoute
+  ForecastRoute: typeof ForecastRoute
+  GoalsRoute: typeof GoalsRoute
+  HistoryRoute: typeof HistoryRoute
+  HubRoute: typeof HubRouteWithChildren
+  PlannerRoute: typeof PlannerRoute
+  ReportsRoute: typeof ReportsRoute
+  SettingsRoute: typeof SettingsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planner': {
+      id: '/planner'
+      path: '/planner'
+      fullPath: '/planner'
+      preLoaderRoute: typeof PlannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hub': {
+      id: '/hub'
+      path: '/hub'
+      fullPath: '/hub'
+      preLoaderRoute: typeof HubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/goals': {
+      id: '/goals'
+      path: '/goals'
+      fullPath: '/goals'
+      preLoaderRoute: typeof GoalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forecast': {
+      id: '/forecast'
+      path: '/forecast'
+      fullPath: '/forecast'
+      preLoaderRoute: typeof ForecastRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/debt-strategy': {
+      id: '/debt-strategy'
+      path: '/debt-strategy'
+      fullPath: '/debt-strategy'
+      preLoaderRoute: typeof DebtStrategyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analytics': {
+      id: '/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/advisor': {
+      id: '/advisor'
+      path: '/advisor'
+      fullPath: '/advisor'
+      preLoaderRoute: typeof AdvisorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +346,101 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hub/': {
+      id: '/hub/'
+      path: '/'
+      fullPath: '/hub/'
+      preLoaderRoute: typeof HubIndexRouteImport
+      parentRoute: typeof HubRoute
+    }
+    '/hub/savings': {
+      id: '/hub/savings'
+      path: '/savings'
+      fullPath: '/hub/savings'
+      preLoaderRoute: typeof HubSavingsRouteImport
+      parentRoute: typeof HubRoute
+    }
+    '/hub/investments': {
+      id: '/hub/investments'
+      path: '/investments'
+      fullPath: '/hub/investments'
+      preLoaderRoute: typeof HubInvestmentsRouteImport
+      parentRoute: typeof HubRoute
+    }
+    '/hub/income': {
+      id: '/hub/income'
+      path: '/income'
+      fullPath: '/hub/income'
+      preLoaderRoute: typeof HubIncomeRouteImport
+      parentRoute: typeof HubRoute
+    }
+    '/hub/debts': {
+      id: '/hub/debts'
+      path: '/debts'
+      fullPath: '/hub/debts'
+      preLoaderRoute: typeof HubDebtsRouteImport
+      parentRoute: typeof HubRoute
+    }
+    '/hub/credit': {
+      id: '/hub/credit'
+      path: '/credit'
+      fullPath: '/hub/credit'
+      preLoaderRoute: typeof HubCreditRouteImport
+      parentRoute: typeof HubRoute
+    }
+    '/hub/bills': {
+      id: '/hub/bills'
+      path: '/bills'
+      fullPath: '/hub/bills'
+      preLoaderRoute: typeof HubBillsRouteImport
+      parentRoute: typeof HubRoute
+    }
+    '/hub/assets': {
+      id: '/hub/assets'
+      path: '/assets'
+      fullPath: '/hub/assets'
+      preLoaderRoute: typeof HubAssetsRouteImport
+      parentRoute: typeof HubRoute
+    }
   }
 }
 
+interface HubRouteChildren {
+  HubAssetsRoute: typeof HubAssetsRoute
+  HubBillsRoute: typeof HubBillsRoute
+  HubCreditRoute: typeof HubCreditRoute
+  HubDebtsRoute: typeof HubDebtsRoute
+  HubIncomeRoute: typeof HubIncomeRoute
+  HubInvestmentsRoute: typeof HubInvestmentsRoute
+  HubSavingsRoute: typeof HubSavingsRoute
+  HubIndexRoute: typeof HubIndexRoute
+}
+
+const HubRouteChildren: HubRouteChildren = {
+  HubAssetsRoute: HubAssetsRoute,
+  HubBillsRoute: HubBillsRoute,
+  HubCreditRoute: HubCreditRoute,
+  HubDebtsRoute: HubDebtsRoute,
+  HubIncomeRoute: HubIncomeRoute,
+  HubInvestmentsRoute: HubInvestmentsRoute,
+  HubSavingsRoute: HubSavingsRoute,
+  HubIndexRoute: HubIndexRoute,
+}
+
+const HubRouteWithChildren = HubRoute._addFileChildren(HubRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdvisorRoute: AdvisorRoute,
+  AnalyticsRoute: AnalyticsRoute,
+  DebtStrategyRoute: DebtStrategyRoute,
+  ForecastRoute: ForecastRoute,
+  GoalsRoute: GoalsRoute,
+  HistoryRoute: HistoryRoute,
+  HubRoute: HubRouteWithChildren,
+  PlannerRoute: PlannerRoute,
+  ReportsRoute: ReportsRoute,
+  SettingsRoute: SettingsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

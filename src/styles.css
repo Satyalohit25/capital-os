@@ -2,6 +2,14 @@
 @source "../src";
 @import "tw-animate-css";
 
+@theme {
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-accent: #166534;
+}
+
+
+
 @custom-variant dark (&:is(.dark *));
 
 /*
@@ -140,5 +148,8 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
   }
 }
+
