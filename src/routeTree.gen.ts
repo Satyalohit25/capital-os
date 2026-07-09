@@ -9,7 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PlannerRouteImport } from './routes/planner'
 import { Route as HubRouteImport } from './routes/hub'
+import { Route as ForecastRouteImport } from './routes/forecast'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HubIndexRouteImport } from './routes/hub.index'
 import { Route as HubSavingsRouteImport } from './routes/hub.savings'
@@ -20,9 +22,19 @@ import { Route as HubCreditRouteImport } from './routes/hub.credit'
 import { Route as HubBillsRouteImport } from './routes/hub.bills'
 import { Route as HubAssetsRouteImport } from './routes/hub.assets'
 
+const PlannerRoute = PlannerRouteImport.update({
+  id: '/planner',
+  path: '/planner',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HubRoute = HubRouteImport.update({
   id: '/hub',
   path: '/hub',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForecastRoute = ForecastRouteImport.update({
+  id: '/forecast',
+  path: '/forecast',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -73,7 +85,9 @@ const HubAssetsRoute = HubAssetsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/forecast': typeof ForecastRoute
   '/hub': typeof HubRouteWithChildren
+  '/planner': typeof PlannerRoute
   '/hub/assets': typeof HubAssetsRoute
   '/hub/bills': typeof HubBillsRoute
   '/hub/credit': typeof HubCreditRoute
@@ -85,6 +99,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/forecast': typeof ForecastRoute
+  '/planner': typeof PlannerRoute
   '/hub/assets': typeof HubAssetsRoute
   '/hub/bills': typeof HubBillsRoute
   '/hub/credit': typeof HubCreditRoute
@@ -97,7 +113,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/forecast': typeof ForecastRoute
   '/hub': typeof HubRouteWithChildren
+  '/planner': typeof PlannerRoute
   '/hub/assets': typeof HubAssetsRoute
   '/hub/bills': typeof HubBillsRoute
   '/hub/credit': typeof HubCreditRoute
@@ -111,7 +129,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/forecast'
     | '/hub'
+    | '/planner'
     | '/hub/assets'
     | '/hub/bills'
     | '/hub/credit'
@@ -123,6 +143,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/forecast'
+    | '/planner'
     | '/hub/assets'
     | '/hub/bills'
     | '/hub/credit'
@@ -134,7 +156,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/forecast'
     | '/hub'
+    | '/planner'
     | '/hub/assets'
     | '/hub/bills'
     | '/hub/credit'
@@ -147,16 +171,32 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ForecastRoute: typeof ForecastRoute
   HubRoute: typeof HubRouteWithChildren
+  PlannerRoute: typeof PlannerRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/planner': {
+      id: '/planner'
+      path: '/planner'
+      fullPath: '/planner'
+      preLoaderRoute: typeof PlannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/hub': {
       id: '/hub'
       path: '/hub'
       fullPath: '/hub'
       preLoaderRoute: typeof HubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forecast': {
+      id: '/forecast'
+      path: '/forecast'
+      fullPath: '/forecast'
+      preLoaderRoute: typeof ForecastRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -251,7 +291,9 @@ const HubRouteWithChildren = HubRoute._addFileChildren(HubRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ForecastRoute: ForecastRoute,
   HubRoute: HubRouteWithChildren,
+  PlannerRoute: PlannerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
