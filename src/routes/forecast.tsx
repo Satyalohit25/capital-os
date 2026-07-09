@@ -18,7 +18,7 @@ export const Route = createFileRoute("/forecast")({
       { name: "description", content: "Project your debt trajectory under snowball vs avalanche." },
     ],
   }),
-  component: Forecast;
+  component: Forecast,
 });
 
 function Forecast() {
