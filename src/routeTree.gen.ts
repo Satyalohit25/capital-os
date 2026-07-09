@@ -9,9 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as PlannerRouteImport } from './routes/planner'
 import { Route as HubRouteImport } from './routes/hub'
+import { Route as HistoryRouteImport } from './routes/history'
+import { Route as GoalsRouteImport } from './routes/goals'
 import { Route as ForecastRouteImport } from './routes/forecast'
+import { Route as DebtStrategyRouteImport } from './routes/debt-strategy'
+import { Route as AnalyticsRouteImport } from './routes/analytics'
+import { Route as AdvisorRouteImport } from './routes/advisor'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HubIndexRouteImport } from './routes/hub.index'
 import { Route as HubSavingsRouteImport } from './routes/hub.savings'
@@ -22,6 +29,16 @@ import { Route as HubCreditRouteImport } from './routes/hub.credit'
 import { Route as HubBillsRouteImport } from './routes/hub.bills'
 import { Route as HubAssetsRouteImport } from './routes/hub.assets'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlannerRoute = PlannerRouteImport.update({
   id: '/planner',
   path: '/planner',
@@ -32,9 +49,34 @@ const HubRoute = HubRouteImport.update({
   path: '/hub',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GoalsRoute = GoalsRouteImport.update({
+  id: '/goals',
+  path: '/goals',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ForecastRoute = ForecastRouteImport.update({
   id: '/forecast',
   path: '/forecast',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DebtStrategyRoute = DebtStrategyRouteImport.update({
+  id: '/debt-strategy',
+  path: '/debt-strategy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalyticsRoute = AnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdvisorRoute = AdvisorRouteImport.update({
+  id: '/advisor',
+  path: '/advisor',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -85,9 +127,16 @@ const HubAssetsRoute = HubAssetsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/advisor': typeof AdvisorRoute
+  '/analytics': typeof AnalyticsRoute
+  '/debt-strategy': typeof DebtStrategyRoute
   '/forecast': typeof ForecastRoute
+  '/goals': typeof GoalsRoute
+  '/history': typeof HistoryRoute
   '/hub': typeof HubRouteWithChildren
   '/planner': typeof PlannerRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
   '/hub/assets': typeof HubAssetsRoute
   '/hub/bills': typeof HubBillsRoute
   '/hub/credit': typeof HubCreditRoute
@@ -99,8 +148,15 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/advisor': typeof AdvisorRoute
+  '/analytics': typeof AnalyticsRoute
+  '/debt-strategy': typeof DebtStrategyRoute
   '/forecast': typeof ForecastRoute
+  '/goals': typeof GoalsRoute
+  '/history': typeof HistoryRoute
   '/planner': typeof PlannerRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
   '/hub/assets': typeof HubAssetsRoute
   '/hub/bills': typeof HubBillsRoute
   '/hub/credit': typeof HubCreditRoute
@@ -113,9 +169,16 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/advisor': typeof AdvisorRoute
+  '/analytics': typeof AnalyticsRoute
+  '/debt-strategy': typeof DebtStrategyRoute
   '/forecast': typeof ForecastRoute
+  '/goals': typeof GoalsRoute
+  '/history': typeof HistoryRoute
   '/hub': typeof HubRouteWithChildren
   '/planner': typeof PlannerRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
   '/hub/assets': typeof HubAssetsRoute
   '/hub/bills': typeof HubBillsRoute
   '/hub/credit': typeof HubCreditRoute
@@ -129,9 +192,16 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/advisor'
+    | '/analytics'
+    | '/debt-strategy'
     | '/forecast'
+    | '/goals'
+    | '/history'
     | '/hub'
     | '/planner'
+    | '/reports'
+    | '/settings'
     | '/hub/assets'
     | '/hub/bills'
     | '/hub/credit'
@@ -143,8 +213,15 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/advisor'
+    | '/analytics'
+    | '/debt-strategy'
     | '/forecast'
+    | '/goals'
+    | '/history'
     | '/planner'
+    | '/reports'
+    | '/settings'
     | '/hub/assets'
     | '/hub/bills'
     | '/hub/credit'
@@ -156,9 +233,16 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/advisor'
+    | '/analytics'
+    | '/debt-strategy'
     | '/forecast'
+    | '/goals'
+    | '/history'
     | '/hub'
     | '/planner'
+    | '/reports'
+    | '/settings'
     | '/hub/assets'
     | '/hub/bills'
     | '/hub/credit'
@@ -171,13 +255,34 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdvisorRoute: typeof AdvisorRoute
+  AnalyticsRoute: typeof AnalyticsRoute
+  DebtStrategyRoute: typeof DebtStrategyRoute
   ForecastRoute: typeof ForecastRoute
+  GoalsRoute: typeof GoalsRoute
+  HistoryRoute: typeof HistoryRoute
   HubRoute: typeof HubRouteWithChildren
   PlannerRoute: typeof PlannerRoute
+  ReportsRoute: typeof ReportsRoute
+  SettingsRoute: typeof SettingsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/planner': {
       id: '/planner'
       path: '/planner'
@@ -192,11 +297,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HubRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/goals': {
+      id: '/goals'
+      path: '/goals'
+      fullPath: '/goals'
+      preLoaderRoute: typeof GoalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/forecast': {
       id: '/forecast'
       path: '/forecast'
       fullPath: '/forecast'
       preLoaderRoute: typeof ForecastRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/debt-strategy': {
+      id: '/debt-strategy'
+      path: '/debt-strategy'
+      fullPath: '/debt-strategy'
+      preLoaderRoute: typeof DebtStrategyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analytics': {
+      id: '/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/advisor': {
+      id: '/advisor'
+      path: '/advisor'
+      fullPath: '/advisor'
+      preLoaderRoute: typeof AdvisorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -291,9 +431,16 @@ const HubRouteWithChildren = HubRoute._addFileChildren(HubRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdvisorRoute: AdvisorRoute,
+  AnalyticsRoute: AnalyticsRoute,
+  DebtStrategyRoute: DebtStrategyRoute,
   ForecastRoute: ForecastRoute,
+  GoalsRoute: GoalsRoute,
+  HistoryRoute: HistoryRoute,
   HubRoute: HubRouteWithChildren,
   PlannerRoute: PlannerRoute,
+  ReportsRoute: ReportsRoute,
+  SettingsRoute: SettingsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
