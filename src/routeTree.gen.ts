@@ -12,6 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as HubRouteImport } from './routes/hub'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HubIndexRouteImport } from './routes/hub.index'
+import { Route as HubSavingsRouteImport } from './routes/hub.savings'
+import { Route as HubInvestmentsRouteImport } from './routes/hub.investments'
+import { Route as HubIncomeRouteImport } from './routes/hub.income'
+import { Route as HubDebtsRouteImport } from './routes/hub.debts'
+import { Route as HubCreditRouteImport } from './routes/hub.credit'
+import { Route as HubBillsRouteImport } from './routes/hub.bills'
+import { Route as HubAssetsRouteImport } from './routes/hub.assets'
 
 const HubRoute = HubRouteImport.update({
   id: '/hub',
@@ -28,28 +35,114 @@ const HubIndexRoute = HubIndexRouteImport.update({
   path: '/',
   getParentRoute: () => HubRoute,
 } as any)
+const HubSavingsRoute = HubSavingsRouteImport.update({
+  id: '/savings',
+  path: '/savings',
+  getParentRoute: () => HubRoute,
+} as any)
+const HubInvestmentsRoute = HubInvestmentsRouteImport.update({
+  id: '/investments',
+  path: '/investments',
+  getParentRoute: () => HubRoute,
+} as any)
+const HubIncomeRoute = HubIncomeRouteImport.update({
+  id: '/income',
+  path: '/income',
+  getParentRoute: () => HubRoute,
+} as any)
+const HubDebtsRoute = HubDebtsRouteImport.update({
+  id: '/debts',
+  path: '/debts',
+  getParentRoute: () => HubRoute,
+} as any)
+const HubCreditRoute = HubCreditRouteImport.update({
+  id: '/credit',
+  path: '/credit',
+  getParentRoute: () => HubRoute,
+} as any)
+const HubBillsRoute = HubBillsRouteImport.update({
+  id: '/bills',
+  path: '/bills',
+  getParentRoute: () => HubRoute,
+} as any)
+const HubAssetsRoute = HubAssetsRouteImport.update({
+  id: '/assets',
+  path: '/assets',
+  getParentRoute: () => HubRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/hub': typeof HubRouteWithChildren
+  '/hub/assets': typeof HubAssetsRoute
+  '/hub/bills': typeof HubBillsRoute
+  '/hub/credit': typeof HubCreditRoute
+  '/hub/debts': typeof HubDebtsRoute
+  '/hub/income': typeof HubIncomeRoute
+  '/hub/investments': typeof HubInvestmentsRoute
+  '/hub/savings': typeof HubSavingsRoute
   '/hub/': typeof HubIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/hub/assets': typeof HubAssetsRoute
+  '/hub/bills': typeof HubBillsRoute
+  '/hub/credit': typeof HubCreditRoute
+  '/hub/debts': typeof HubDebtsRoute
+  '/hub/income': typeof HubIncomeRoute
+  '/hub/investments': typeof HubInvestmentsRoute
+  '/hub/savings': typeof HubSavingsRoute
   '/hub': typeof HubIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/hub': typeof HubRouteWithChildren
+  '/hub/assets': typeof HubAssetsRoute
+  '/hub/bills': typeof HubBillsRoute
+  '/hub/credit': typeof HubCreditRoute
+  '/hub/debts': typeof HubDebtsRoute
+  '/hub/income': typeof HubIncomeRoute
+  '/hub/investments': typeof HubInvestmentsRoute
+  '/hub/savings': typeof HubSavingsRoute
   '/hub/': typeof HubIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/hub' | '/hub/'
+  fullPaths:
+    | '/'
+    | '/hub'
+    | '/hub/assets'
+    | '/hub/bills'
+    | '/hub/credit'
+    | '/hub/debts'
+    | '/hub/income'
+    | '/hub/investments'
+    | '/hub/savings'
+    | '/hub/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/hub'
-  id: '__root__' | '/' | '/hub' | '/hub/'
+  to:
+    | '/'
+    | '/hub/assets'
+    | '/hub/bills'
+    | '/hub/credit'
+    | '/hub/debts'
+    | '/hub/income'
+    | '/hub/investments'
+    | '/hub/savings'
+    | '/hub'
+  id:
+    | '__root__'
+    | '/'
+    | '/hub'
+    | '/hub/assets'
+    | '/hub/bills'
+    | '/hub/credit'
+    | '/hub/debts'
+    | '/hub/income'
+    | '/hub/investments'
+    | '/hub/savings'
+    | '/hub/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -80,14 +173,77 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HubIndexRouteImport
       parentRoute: typeof HubRoute
     }
+    '/hub/savings': {
+      id: '/hub/savings'
+      path: '/savings'
+      fullPath: '/hub/savings'
+      preLoaderRoute: typeof HubSavingsRouteImport
+      parentRoute: typeof HubRoute
+    }
+    '/hub/investments': {
+      id: '/hub/investments'
+      path: '/investments'
+      fullPath: '/hub/investments'
+      preLoaderRoute: typeof HubInvestmentsRouteImport
+      parentRoute: typeof HubRoute
+    }
+    '/hub/income': {
+      id: '/hub/income'
+      path: '/income'
+      fullPath: '/hub/income'
+      preLoaderRoute: typeof HubIncomeRouteImport
+      parentRoute: typeof HubRoute
+    }
+    '/hub/debts': {
+      id: '/hub/debts'
+      path: '/debts'
+      fullPath: '/hub/debts'
+      preLoaderRoute: typeof HubDebtsRouteImport
+      parentRoute: typeof HubRoute
+    }
+    '/hub/credit': {
+      id: '/hub/credit'
+      path: '/credit'
+      fullPath: '/hub/credit'
+      preLoaderRoute: typeof HubCreditRouteImport
+      parentRoute: typeof HubRoute
+    }
+    '/hub/bills': {
+      id: '/hub/bills'
+      path: '/bills'
+      fullPath: '/hub/bills'
+      preLoaderRoute: typeof HubBillsRouteImport
+      parentRoute: typeof HubRoute
+    }
+    '/hub/assets': {
+      id: '/hub/assets'
+      path: '/assets'
+      fullPath: '/hub/assets'
+      preLoaderRoute: typeof HubAssetsRouteImport
+      parentRoute: typeof HubRoute
+    }
   }
 }
 
 interface HubRouteChildren {
+  HubAssetsRoute: typeof HubAssetsRoute
+  HubBillsRoute: typeof HubBillsRoute
+  HubCreditRoute: typeof HubCreditRoute
+  HubDebtsRoute: typeof HubDebtsRoute
+  HubIncomeRoute: typeof HubIncomeRoute
+  HubInvestmentsRoute: typeof HubInvestmentsRoute
+  HubSavingsRoute: typeof HubSavingsRoute
   HubIndexRoute: typeof HubIndexRoute
 }
 
 const HubRouteChildren: HubRouteChildren = {
+  HubAssetsRoute: HubAssetsRoute,
+  HubBillsRoute: HubBillsRoute,
+  HubCreditRoute: HubCreditRoute,
+  HubDebtsRoute: HubDebtsRoute,
+  HubIncomeRoute: HubIncomeRoute,
+  HubInvestmentsRoute: HubInvestmentsRoute,
+  HubSavingsRoute: HubSavingsRoute,
   HubIndexRoute: HubIndexRoute,
 }
 
