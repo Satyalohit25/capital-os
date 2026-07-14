@@ -143,7 +143,9 @@ export function AppSidebar() {
         <div className="mt-auto border-t border-neutral-950/5 pt-4">
           <Link to="/settings" className="flex items-center gap-3 px-3 hover:opacity-80">
             <Avatar className="size-8">
-              {settings.avatarUrl && <AvatarImage src={settings.avatarUrl} alt={settings.profileName} />}
+              {settings.avatarUrl && (
+                <AvatarImage src={settings.avatarUrl} alt={settings.profileName} />
+              )}
               <AvatarFallback className="bg-neutral-200 text-xs text-neutral-600 outline outline-1 -outline-offset-1 outline-black/5">
                 {initials}
               </AvatarFallback>

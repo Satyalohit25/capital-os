@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -121,7 +122,10 @@ export function CollectionEditor<T extends { id: string; [k: string]: any }>({
             <div className="grid grid-cols-1 gap-4 py-2 sm:grid-cols-2">
               {fields.map((f) => (
                 <div key={f.key} className="space-y-1.5">
-                  <Label htmlFor={f.key} className="text-xs uppercase tracking-wider text-neutral-500">
+                  <Label
+                    htmlFor={f.key}
+                    className="text-xs uppercase tracking-wider text-neutral-500"
+                  >
                     {f.label}
                   </Label>
                   {f.type === "select" && f.options ? (
@@ -183,20 +187,25 @@ export function CollectionEditor<T extends { id: string; [k: string]: any }>({
           return (
             <div key={it.id} className="flex items-center gap-4 py-4">
               <div className="flex-1">
-                <div className="text-sm font-medium text-neutral-900">{String(it[primaryField])}</div>
+                <div className="text-sm font-medium text-neutral-900">
+                  {String(it[primaryField])}
+                </div>
                 <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-neutral-500">
                   {fields
                     .filter((f) => f.key !== primaryField && f.key !== amountField)
                     .slice(0, 3)
                     .map((f) => (
                       <span key={f.key}>
-                        <span className="uppercase tracking-wider text-neutral-400">{f.label}: </span>
+                        <span className="uppercase tracking-wider text-neutral-400">
+                          {f.label}:{" "}
+                        </span>
                         {f.format ? f.format(it[f.key]) : String(it[f.key])}
                       </span>
                     ))}
                   {isPaid && record?.paidDate && (
                     <span className="text-emerald-600">
-                      ✓ Paid {record.paidDate}{record.paidAmount ? ` · ${formatINR(record.paidAmount)}` : ""}
+                      ✓ Paid {record.paidDate}
+                      {record.paidAmount ? ` · ${formatINR(record.paidAmount)}` : ""}
                     </span>
                   )}
                 </div>
@@ -212,7 +221,9 @@ export function CollectionEditor<T extends { id: string; [k: string]: any }>({
                   <MarkPaidButton
                     isPaid={isPaid}
                     defaultAmount={defaultPaidAmount ? defaultPaidAmount(it) : 0}
-                    onConfirm={(date, amount) => markPaid(paidKey, { paid: true, paidDate: date, paidAmount: amount })}
+                    onConfirm={(date, amount) =>
+                      markPaid(paidKey, { paid: true, paidDate: date, paidAmount: amount })
+                    }
                     onClear={() => clearPaid(paidKey)}
                   />
                 )}
@@ -279,7 +290,10 @@ function MarkPaidButton({
           size="icon"
           className="h-8 w-8 text-neutral-400 hover:text-emerald-600"
           title="Mark paid"
-          onClick={() => { setDate(today); setAmount(defaultAmount); }}
+          onClick={() => {
+            setDate(today);
+            setAmount(defaultAmount);
+          }}
         >
           <Circle className="h-3.5 w-3.5" />
         </Button>
@@ -297,15 +311,22 @@ function MarkPaidButton({
             />
           </div>
           <div className="space-y-1.5">
-            <label className="text-xs uppercase tracking-wider text-neutral-500">Amount paid (₹)</label>
+            <label className="text-xs uppercase tracking-wider text-neutral-500">
+              Amount paid (₹)
+            </label>
             <AmountInput value={amount} onChange={setAmount} />
           </div>
           <div className="flex justify-end gap-2">
-            <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
             <Button
               size="sm"
               className="bg-neutral-900 text-white hover:bg-neutral-800"
-              onClick={() => { onConfirm(date, amount); setOpen(false); }}
+              onClick={() => {
+                onConfirm(date, amount);
+                setOpen(false);
+              }}
             >
               Confirm
             </Button>

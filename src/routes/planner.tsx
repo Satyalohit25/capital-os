@@ -16,7 +16,10 @@ export const Route = createFileRoute("/planner")({
   head: () => ({
     meta: [
       { title: "Monthly Planner — Capital OS" },
-      { name: "description", content: "This month's cash waterfall, calendar, and payment checklist." },
+      {
+        name: "description",
+        content: "This month's cash waterfall, calendar, and payment checklist.",
+      },
     ],
   }),
   component: Planner,
@@ -100,14 +103,21 @@ function Planner() {
                       onCheckedChange={() =>
                         done
                           ? s.clearPaid(key)
-                          : s.markPaid(key, { paid: true, paidDate: new Date().toISOString().slice(0, 10) })
+                          : s.markPaid(key, {
+                              paid: true,
+                              paidDate: new Date().toISOString().slice(0, 10),
+                            })
                       }
                     />
                     <div>
-                      <div className={`text-sm ${done ? "text-neutral-400 line-through" : "text-neutral-900"}`}>
+                      <div
+                        className={`text-sm ${done ? "text-neutral-400 line-through" : "text-neutral-900"}`}
+                      >
                         {d.label}
                       </div>
-                      <div className="text-xs text-neutral-400">Due day {d.day} • {d.sub}</div>
+                      <div className="text-xs text-neutral-400">
+                        Due day {d.day} • {d.sub}
+                      </div>
                     </div>
                   </div>
                   <div className="font-serif tabular-nums text-neutral-900">

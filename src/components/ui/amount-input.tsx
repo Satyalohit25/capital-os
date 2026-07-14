@@ -13,8 +13,12 @@ export function AmountInput({ id, value, onChange }: AmountInputProps) {
   // While focused: show raw digits so user can edit naturally
   // While blurred: show formatted string
   const display = focused
-    ? value === 0 ? "" : String(value)
-    : value === 0 ? "" : value.toLocaleString("en-IN");
+    ? value === 0
+      ? ""
+      : String(value)
+    : value === 0
+      ? ""
+      : value.toLocaleString("en-IN");
 
   return (
     <Input

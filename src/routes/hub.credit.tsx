@@ -11,7 +11,11 @@ export const Route = createFileRoute("/hub/credit")({
 function Page() {
   const items = useFinance((s) => s.creditLines);
   return (
-    <PageShell eyebrow="Financial Hub" title="Credit lines" description="Cards, overdrafts, and personal lines with utilization and due dates.">
+    <PageShell
+      eyebrow="Financial Hub"
+      title="Credit lines"
+      description="Cards, overdrafts, and personal lines with utilization and due dates."
+    >
       <CollectionEditor<CreditLine>
         collectionKey="creditLines"
         items={items}

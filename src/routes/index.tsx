@@ -20,7 +20,10 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Dashboard — Capital OS" },
-      { name: "description", content: "Your financial overview: cash, debt, forecast, and path to zero." },
+      {
+        name: "description",
+        content: "Your financial overview: cash, debt, forecast, and path to zero.",
+      },
     ],
   }),
   beforeLoad: () => {
@@ -67,7 +70,15 @@ function Dashboard() {
     >
       {/* KPI Row */}
       <div className="mb-16 grid grid-cols-2 gap-8 md:grid-cols-4">
-        <Kpi label="Health Score" value={<span>{score}<span className="text-xl italic text-neutral-300">/100</span></span>} />
+        <Kpi
+          label="Health Score"
+          value={
+            <span>
+              {score}
+              <span className="text-xl italic text-neutral-300">/100</span>
+            </span>
+          }
+        />
         <Kpi label="Available Cash" value={formatINR(cash)} />
         <Kpi label="Debt Remaining" value={formatINR(debt)} />
         <Kpi label="Days to Zero" value={days.toLocaleString("en-IN")} />
@@ -90,7 +101,9 @@ function Dashboard() {
               <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
                 +{p.m} Month{p.m > 1 ? "s" : ""}
               </span>
-              <div className={`mt-1 font-serif text-lg ${i === 2 ? "italic text-[--color-accent]" : "text-neutral-900"}`}>
+              <div
+                className={`mt-1 font-serif text-lg ${i === 2 ? "italic text-[--color-accent]" : "text-neutral-900"}`}
+              >
                 {formatINR(p.v)}
               </div>
             </div>
@@ -126,7 +139,9 @@ function Dashboard() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-serif text-lg text-neutral-900">{formatINR(d.remaining)}</div>
+                  <div className="font-serif text-lg text-neutral-900">
+                    {formatINR(d.remaining)}
+                  </div>
                   <div
                     className={`mt-1 text-[10px] font-bold uppercase tracking-wider ${d.priority === 1 ? "text-red-600" : "text-neutral-400"}`}
                   >
@@ -148,7 +163,8 @@ function Dashboard() {
                     <div>
                       <div className="text-sm font-medium text-neutral-900">{d.label}</div>
                       <div className="text-xs capitalize text-neutral-500">
-                        {new Date().toLocaleDateString("en-IN", { month: "short" })} {d.day} • {d.sub}
+                        {new Date().toLocaleDateString("en-IN", { month: "short" })} {d.day} •{" "}
+                        {d.sub}
                       </div>
                     </div>
                     <div className="text-sm font-medium tabular-nums text-neutral-900">
@@ -192,9 +208,7 @@ function Dashboard() {
                 <div className="text-xs text-neutral-500">Income in</div>
               </div>
               <div className="text-right">
-                <div className="font-serif text-2xl text-neutral-900">
-                  {formatINR(inc - cash)}
-                </div>
+                <div className="font-serif text-2xl text-neutral-900">{formatINR(inc - cash)}</div>
                 <div className="text-xs text-neutral-500">Committed out</div>
               </div>
             </div>

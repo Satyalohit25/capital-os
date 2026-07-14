@@ -2,7 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { LockedModule } from "@/components/locked-module";
 
 export const Route = createFileRoute("/debt-strategy")({
-  head: () => ({ meta: [{ title: "Debt Strategy — Capital OS" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({
+    meta: [{ title: "Debt Strategy — Capital OS" }, { name: "robots", content: "noindex" }],
+  }),
   component: () => (
     <LockedModule
       phase="Phase 4"

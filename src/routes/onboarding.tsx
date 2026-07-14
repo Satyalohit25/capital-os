@@ -17,7 +17,9 @@ function Onboarding() {
   const [step, setStep] = useState(0);
 
   // Clear seed data on mount — user starts fresh, only their entered data accumulates
-  useEffect(() => { store.clearCollections(); }, []);
+  useEffect(() => {
+    store.clearCollections();
+  }, [store]);
 
   // Step 0: Income
   const [incomeLabel, setIncomeLabel] = useState("Primary Salary");
@@ -121,7 +123,13 @@ function Onboarding() {
     savings: summarySavings,
   });
   const cash = availableCash(summaryIncome, summaryBills, summaryDebts, summaryCredit);
-  const nw = netWorth(summaryAssets, summaryInvestments, summarySavings, summaryDebts, summaryCredit);
+  const nw = netWorth(
+    summaryAssets,
+    summaryInvestments,
+    summarySavings,
+    summaryDebts,
+    summaryCredit,
+  );
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4">
@@ -148,7 +156,9 @@ function Onboarding() {
           <>
             <div>
               <div className="font-serif text-2xl text-neutral-900">What do you earn?</div>
-              <p className="mt-1 text-sm text-neutral-500">Your primary monthly take-home income.</p>
+              <p className="mt-1 text-sm text-neutral-500">
+                Your primary monthly take-home income.
+              </p>
             </div>
             <div className="space-y-3">
               <div className="space-y-1.5">
@@ -160,15 +170,23 @@ function Onboarding() {
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs uppercase tracking-wider text-neutral-500">Monthly amount (₹)</label>
+                <label className="text-xs uppercase tracking-wider text-neutral-500">
+                  Monthly amount (₹)
+                </label>
                 <AmountInput value={incomeAmount} onChange={setIncomeAmount} />
               </div>
             </div>
             <div className="flex items-center justify-between pt-2">
-              <button onClick={skip} className="text-sm text-neutral-400 underline-offset-2 hover:underline">
+              <button
+                onClick={skip}
+                className="text-sm text-neutral-400 underline-offset-2 hover:underline"
+              >
                 Skip setup
               </button>
-              <Button onClick={addIncomeAndNext} className="bg-neutral-900 text-white hover:bg-neutral-800">
+              <Button
+                onClick={addIncomeAndNext}
+                className="bg-neutral-900 text-white hover:bg-neutral-800"
+              >
                 Next →
               </Button>
             </div>
@@ -179,7 +197,9 @@ function Onboarding() {
           <>
             <div>
               <div className="font-serif text-2xl text-neutral-900">Biggest bill?</div>
-              <p className="mt-1 text-sm text-neutral-500">Add your largest recurring commitment (rent, EMI, etc.).</p>
+              <p className="mt-1 text-sm text-neutral-500">
+                Add your largest recurring commitment (rent, EMI, etc.).
+              </p>
             </div>
             <div className="space-y-3">
               <div className="space-y-1.5">
@@ -191,17 +211,27 @@ function Onboarding() {
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs uppercase tracking-wider text-neutral-500">Monthly amount (₹)</label>
+                <label className="text-xs uppercase tracking-wider text-neutral-500">
+                  Monthly amount (₹)
+                </label>
                 <AmountInput value={billAmount} onChange={setBillAmount} />
               </div>
             </div>
             <div className="flex items-center justify-between pt-2">
-              <button onClick={skip} className="text-sm text-neutral-400 underline-offset-2 hover:underline">
+              <button
+                onClick={skip}
+                className="text-sm text-neutral-400 underline-offset-2 hover:underline"
+              >
                 Skip setup
               </button>
               <div className="flex gap-2">
-                <Button variant="ghost" onClick={() => setStep(0)}>← Back</Button>
-                <Button onClick={addBillAndNext} className="bg-neutral-900 text-white hover:bg-neutral-800">
+                <Button variant="ghost" onClick={() => setStep(0)}>
+                  ← Back
+                </Button>
+                <Button
+                  onClick={addBillAndNext}
+                  className="bg-neutral-900 text-white hover:bg-neutral-800"
+                >
                   Next →
                 </Button>
               </div>
@@ -213,7 +243,9 @@ function Onboarding() {
           <>
             <div>
               <div className="font-serif text-2xl text-neutral-900">Any debt?</div>
-              <p className="mt-1 text-sm text-neutral-500">A loan or credit balance you're paying off. Skip if none.</p>
+              <p className="mt-1 text-sm text-neutral-500">
+                A loan or credit balance you're paying off. Skip if none.
+              </p>
             </div>
             <div className="space-y-3">
               <div className="space-y-1.5">
@@ -225,21 +257,33 @@ function Onboarding() {
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs uppercase tracking-wider text-neutral-500">Outstanding balance (₹)</label>
+                <label className="text-xs uppercase tracking-wider text-neutral-500">
+                  Outstanding balance (₹)
+                </label>
                 <AmountInput value={debtRemaining} onChange={setDebtRemaining} />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs uppercase tracking-wider text-neutral-500">Monthly EMI (₹)</label>
+                <label className="text-xs uppercase tracking-wider text-neutral-500">
+                  Monthly EMI (₹)
+                </label>
                 <AmountInput value={debtEmi} onChange={setDebtEmi} />
               </div>
             </div>
             <div className="flex items-center justify-between pt-2">
-              <button onClick={skip} className="text-sm text-neutral-400 underline-offset-2 hover:underline">
+              <button
+                onClick={skip}
+                className="text-sm text-neutral-400 underline-offset-2 hover:underline"
+              >
                 Skip setup
               </button>
               <div className="flex gap-2">
-                <Button variant="ghost" onClick={() => setStep(1)}>← Back</Button>
-                <Button onClick={addDebtAndNext} className="bg-neutral-900 text-white hover:bg-neutral-800">
+                <Button variant="ghost" onClick={() => setStep(1)}>
+                  ← Back
+                </Button>
+                <Button
+                  onClick={addDebtAndNext}
+                  className="bg-neutral-900 text-white hover:bg-neutral-800"
+                >
                   Next →
                 </Button>
               </div>
@@ -251,11 +295,15 @@ function Onboarding() {
           <>
             <div>
               <div className="font-serif text-2xl text-neutral-900">Savings goal?</div>
-              <p className="mt-1 text-sm text-neutral-500">A target you're building towards. Emergency fund is a great start.</p>
+              <p className="mt-1 text-sm text-neutral-500">
+                A target you're building towards. Emergency fund is a great start.
+              </p>
             </div>
             <div className="space-y-3">
               <div className="space-y-1.5">
-                <label className="text-xs uppercase tracking-wider text-neutral-500">Goal name</label>
+                <label className="text-xs uppercase tracking-wider text-neutral-500">
+                  Goal name
+                </label>
                 <Input
                   value={savingsLabel}
                   onChange={(e) => setSavingsLabel(e.target.value)}
@@ -263,11 +311,15 @@ function Onboarding() {
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs uppercase tracking-wider text-neutral-500">Target amount (₹)</label>
+                <label className="text-xs uppercase tracking-wider text-neutral-500">
+                  Target amount (₹)
+                </label>
                 <AmountInput value={savingsTarget} onChange={setSavingsTarget} />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs uppercase tracking-wider text-neutral-500">Monthly contribution (₹)</label>
+                <label className="text-xs uppercase tracking-wider text-neutral-500">
+                  Monthly contribution (₹)
+                </label>
                 <AmountInput value={savingsMonthly} onChange={setSavingsMonthly} />
               </div>
 
@@ -283,11 +335,15 @@ function Onboarding() {
                       <div className="text-xs text-neutral-500">Health score</div>
                     </div>
                     <div>
-                      <div className="font-serif text-lg text-neutral-900">{formatINR(Math.max(0, cash))}</div>
+                      <div className="font-serif text-lg text-neutral-900">
+                        {formatINR(Math.max(0, cash))}
+                      </div>
                       <div className="text-xs text-neutral-500">Free cash</div>
                     </div>
                     <div>
-                      <div className={`font-serif text-lg ${nw >= 0 ? "text-neutral-900" : "text-red-600"}`}>
+                      <div
+                        className={`font-serif text-lg ${nw >= 0 ? "text-neutral-900" : "text-red-600"}`}
+                      >
                         {formatINR(nw)}
                       </div>
                       <div className="text-xs text-neutral-500">Net worth</div>
@@ -297,11 +353,16 @@ function Onboarding() {
               )}
             </div>
             <div className="flex items-center justify-between pt-2">
-              <button onClick={skip} className="text-sm text-neutral-400 underline-offset-2 hover:underline">
+              <button
+                onClick={skip}
+                className="text-sm text-neutral-400 underline-offset-2 hover:underline"
+              >
                 Skip setup
               </button>
               <div className="flex gap-2">
-                <Button variant="ghost" onClick={() => setStep(2)}>← Back</Button>
+                <Button variant="ghost" onClick={() => setStep(2)}>
+                  ← Back
+                </Button>
                 <Button onClick={finish} className="bg-neutral-900 text-white hover:bg-neutral-800">
                   Go to Dashboard →
                 </Button>

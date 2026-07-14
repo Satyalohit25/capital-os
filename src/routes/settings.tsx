@@ -67,7 +67,9 @@ function SettingsPage() {
           <h2 className="font-serif text-xl text-neutral-900">Profile</h2>
           <div className="mt-4 space-y-4">
             <div>
-              <label className="text-xs uppercase tracking-wider text-neutral-500">Display name</label>
+              <label className="text-xs uppercase tracking-wider text-neutral-500">
+                Display name
+              </label>
               <input
                 type="text"
                 value={state.settings.profileName}
@@ -149,9 +151,7 @@ function SettingsPage() {
               <input
                 type="number"
                 value={state.settings.extraPayment}
-                onChange={(e) =>
-                  state.setSettings({ extraPayment: Number(e.target.value) || 0 })
-                }
+                onChange={(e) => state.setSettings({ extraPayment: Number(e.target.value) || 0 })}
                 className="mt-1 w-40 rounded-md border border-neutral-200 bg-white px-2 py-1 text-neutral-900"
               />
             </div>
@@ -160,7 +160,9 @@ function SettingsPage() {
               <ToggleGroup
                 type="single"
                 value={state.settings.theme}
-                onValueChange={(v) => v && state.setSettings({ theme: v as "light" | "dark" | "system" })}
+                onValueChange={(v) =>
+                  v && state.setSettings({ theme: v as "light" | "dark" | "system" })
+                }
                 className="mt-1 justify-start"
               >
                 <ToggleGroupItem value="light" aria-label="Light" title="Light">

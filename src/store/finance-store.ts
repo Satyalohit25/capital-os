@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -82,7 +83,7 @@ export type Strategy = "snowball" | "avalanche";
 
 export interface PaymentRecord {
   paid: boolean;
-  paidDate?: string;  // ISO date
+  paidDate?: string; // ISO date
   paidAmount?: number;
 }
 
@@ -142,10 +143,31 @@ const seed = () => ({
   ] as IncomeSource[],
   bills: [
     { id: uid(), name: "Rent", amount: 32000, dueDay: 5, category: "essential", autoPay: false },
-    { id: uid(), name: "Electricity", amount: 3200, dueDay: 12, category: "utility", autoPay: true },
+    {
+      id: uid(),
+      name: "Electricity",
+      amount: 3200,
+      dueDay: 12,
+      category: "utility",
+      autoPay: true,
+    },
     { id: uid(), name: "Broadband", amount: 1499, dueDay: 18, category: "utility", autoPay: true },
-    { id: uid(), name: "Groceries", amount: 12000, dueDay: 1, category: "variable", autoPay: false },
-    { id: uid(), name: "Netflix", amount: 649, dueDay: 22, category: "subscription", autoPay: true },
+    {
+      id: uid(),
+      name: "Groceries",
+      amount: 12000,
+      dueDay: 1,
+      category: "variable",
+      autoPay: false,
+    },
+    {
+      id: uid(),
+      name: "Netflix",
+      amount: 649,
+      dueDay: 22,
+      category: "subscription",
+      autoPay: true,
+    },
   ] as Bill[],
   debts: [
     {
@@ -247,7 +269,9 @@ export const useFinance = create<State>()(
       checklist: {},
 
       addItem: (k, item) =>
-        set((s) => ({ [k]: [...(s[k] as any[]), { ...item, id: (item as any).id || uid() }] }) as any),
+        set(
+          (s) => ({ [k]: [...(s[k] as any[]), { ...item, id: (item as any).id || uid() }] }) as any,
+        ),
       updateItem: (k, id, patch) =>
         set(
           (s) =>
@@ -258,8 +282,7 @@ export const useFinance = create<State>()(
       removeItem: (k, id) =>
         set((s) => ({ [k]: (s[k] as any[]).filter((it) => it.id !== id) }) as any),
       setSettings: (patch) => set((s) => ({ settings: { ...s.settings, ...patch } })),
-      markPaid: (key, record) =>
-        set((s) => ({ checklist: { ...s.checklist, [key]: record } })),
+      markPaid: (key, record) => set((s) => ({ checklist: { ...s.checklist, [key]: record } })),
       clearPaid: (key) =>
         set((s) => {
           const next = { ...s.checklist };
