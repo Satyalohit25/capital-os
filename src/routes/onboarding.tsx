@@ -18,8 +18,8 @@ function Onboarding() {
 
   // Clear seed data on mount — user starts fresh, only their entered data accumulates
   useEffect(() => {
-    store.clearCollections();
-  }, [store]);
+    useFinance.getState().clearCollections();
+  }, []);
 
   // Step 0: Income
   const [incomeLabel, setIncomeLabel] = useState("Primary Salary");
@@ -107,13 +107,13 @@ function Onboarding() {
     navigate({ to: "/" });
   };
 
-  const summaryIncome = useFinance.getState().income;
-  const summaryBills = useFinance.getState().bills;
-  const summaryDebts = useFinance.getState().debts;
-  const summaryCredit = useFinance.getState().creditLines;
-  const summarySavings = useFinance.getState().savings;
-  const summaryAssets = useFinance.getState().assets;
-  const summaryInvestments = useFinance.getState().investments;
+  const summaryIncome = store.income;
+  const summaryBills = store.bills;
+  const summaryDebts = store.debts;
+  const summaryCredit = store.creditLines;
+  const summarySavings = store.savings;
+  const summaryAssets = store.assets;
+  const summaryInvestments = store.investments;
 
   const score = healthScore({
     income: summaryIncome,
