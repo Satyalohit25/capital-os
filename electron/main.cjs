@@ -6,8 +6,8 @@ const fs = require("node:fs");
 const url = require("node:url");
 
 const isDev = !app.isPackaged;
-// When packaged, static assets live inside the asar's `dist/` folder.
-const DIST_DIR = path.join(__dirname, "..", "dist");
+// Static SPA assets from vite build (DESKTOP_BUILD=1) live in dist/client/
+const DIST_DIR = path.join(__dirname, "..", "dist", "client");
 const INDEX_HTML = path.join(DIST_DIR, "index.html");
 
 // Serve dist/ as a tiny SPA-fallback static server so TanStack Router

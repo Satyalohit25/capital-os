@@ -8,7 +8,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "build:dev": "vite build --mode development",
-    "build:desktop": "cross-env DESKTOP_BUILD=1 vite build",
+    "build:desktop": "cross-env DESKTOP_BUILD=1 vite build && node electron/prepare-dist.cjs",
     "electron:dev": "npm run build:desktop && electron .",
     "electron:pack:win": "npm run build:desktop && electron-packager . \"Capital OS\" --platform=win32 --arch=x64 --out=electron-release --overwrite --icon=build/icon.ico --ignore=\"^/(src|public|electron-release|node_modules/(?!electron$))\"",
     "preview": "vite preview",
