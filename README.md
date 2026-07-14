@@ -32,6 +32,171 @@ Capital OS features a premium dashboard layout based on:
 
 ---
 
+## 🗺️ Product Roadmap & Architecture
+
+### Master Product Flow
+```mermaid
+flowchart TD
+  classDef primary fill:#10b981,stroke:#059669,color:#fff,font-weight:bold;
+  classDef secondary fill:#1e293b,stroke:#475569,color:#f8fafc;
+  classDef accent fill:#6366f1,stroke:#4f46e5,color:#fff,font-weight:bold;
+
+  DB[DASHBOARD]:::primary
+  
+  HUB[Financial Hub]:::secondary
+  PLAN[Monthly Planner]:::secondary
+  GOAL[Goal Planner]:::secondary
+  
+  FORE[Forecast Engine]:::accent
+  STRAT[Debt Strategy]:::accent
+  ANALY[Analytics]:::secondary
+  
+  AI[AI Financial Advisor]:::secondary
+  REP[Reports & History]:::secondary
+  SYNC[Offline Sync • Backup • Restore]:::primary
+  
+  DB --> HUB & PLAN & GOAL
+  HUB & PLAN & GOAL --> FORE
+  FORE --> STRAT
+  ANALY --> STRAT
+  STRAT --> FORE
+  FORE & STRAT --> AI
+  ANALY & GOAL --> REP
+  AI & REP --> SYNC
+```
+
+### Core Architecture
+```
+Financial Operating System
+├── Dashboard (Overview & Core Metrics)
+├── Financial Hub
+│   ├── Income (Salary, Side, Bonus, expected)
+│   ├── Bills (Utility, Subscriptions, Auto Pay)
+│   ├── Debts (EMIs, BNPL, Personal/Bank loans)
+│   ├── Credit Lines (Cards, Overdraft, limits)
+│   ├── Savings (Emergency fund, Goal milestones)
+│   ├── Investments (SIPs, Stocks, Crypto, Mutual Funds)
+│   └── Assets (Property, Gold, Vehicles, Bank balances)
+├── Monthly Planner (Waterfall, Checklist, Calendar)
+├── Forecast Engine (Multi-month projections, Scenarios)
+├── Debt Strategy (Snowball, Avalanche, Smart Mix)
+├── Goal Planner
+├── Analytics
+├── Reports
+├── AI Advisor
+├── History
+└── Settings
+```
+
+---
+
+### Implementation Phases (Roadmap)
+Below is the 15-phase implementation plan detailing the vision from core foundation to long-term automation:
+
+<details>
+<summary><b>Phase 1 — Foundation (Current Build)</b></summary>
+
+*   **Dashboard Widgets**: Available cash, commitments, Net Worth, debt remaining, timeline, and dynamic Financial Health Score.
+*   **Income Tracking**: Salary, side income, recurring, and variable sources.
+*   **Bills Management**: Recurring, variable, utilities, and auto-pay tags.
+*   **Liability Tracking**: Outstanding loans (personal, bank, friends), EMIs, and credit limits.
+*   **Savings & Investments**: SIPs, mutual funds, stocks, crypto, property, and cash assets.
+</details>
+
+<details>
+<summary><b>Phase 2 — Monthly Planning</b></summary>
+
+*   **Workspace Flow**: Income → Mandatory Bills → Debts → Savings → Lifestyle allocation workspace.
+*   **Planning Interface**: Monthly calendar grid, due date reminders, checklist, and cash flow timeline.
+</details>
+
+<details>
+<summary><b>Phase 3 — Forecast Engine</b></summary>
+
+*   **Projections**: Generate 1, 3, 6, 12-month projections of cash flow, savings, net worth, and debt-free target dates.
+*   **Scenario Simulator**: "What if" sandbox (e.g., salary change, unexpected bills, extra payments, loan closures).
+</details>
+
+<details>
+<summary><b>Phase 4 — Debt Strategy</b></summary>
+
+*   **Algorithms**: Debt Snowball (lowest balance first) vs. Debt Avalanche (highest APR first).
+*   **Smart Strategy Mix**: Automated calculations targeting minimum interest, penalty protection, and credit score optimization.
+</details>
+
+<details>
+<summary><b>Phase 5 — Goal Planner</b></summary>
+
+*   **Track Milestones**: Milestones for emergency funds, vacations, assets, and overall debt freedom.
+*   **Estimates**: Computes exact timelines based on current monthly contribution configurations.
+</details>
+
+<details>
+<summary><b>Phase 6 — Analytics</b></summary>
+
+*   **Visualizations**: Sankey flow diagrams, Waterfall cash flow charts, calendar heatmaps, and trendlines.
+*   **Trends**: Debt timeline curves, savings growth trajectories, and goal completion rates.
+</details>
+
+<details>
+<summary><b>Phase 7 — AI Advisor (Financial Coach)</b></summary>
+
+*   **Scenario Queries**: Ask queries like *"Can I buy a bike?"*, *"Should I invest this month?"*, or *"Which debt should I pay first?"*.
+*   **Actionable Output**: Runs simulations behind the scenes and returns clear recommendations and impact summaries.
+</details>
+
+<details>
+<summary><b>Phase 8 — Reports</b></summary>
+
+*   **Exports**: Export monthly financial statements, net worth reviews, and strategy audits.
+*   **Formats**: Save or share as PDF, Excel, CSV, or JSON.
+</details>
+
+<details>
+<summary><b>Phase 9 — History</b></summary>
+
+*   **Timeline Snapshots**: Browse previous months' payment registries, completed milestones, and archived data snapshots.
+</details>
+
+<details>
+<summary><b>Phase 10 — Offline PWA & Data Portability</b></summary>
+
+*   **Database**: Local IndexedDB browser-side storage.
+*   **Backups**: Auto-backups and manual JSON export/import.
+</details>
+
+<details>
+<summary><b>Phase 11 — Intelligence Engine</b></summary>
+
+*   **Automated Metrics**: Debt-to-income ratio, emergency readiness scores, stability factors, and credit utilization alerts.
+</details>
+
+<details>
+<summary><b>Phase 12 — Automation</b></summary>
+
+*   **Schedulers**: Automatic recurring transaction logging, automated monthly archives, and payment/goal warnings.
+</details>
+
+<details>
+<summary><b>Phase 13 — Mobile Experience</b></summary>
+
+*   **Mobile Interface**: Swipe-to-pay, quick floating add buttons, home widgets, and voice inputs.
+</details>
+
+<details>
+<summary><b>Phase 14 — Settings & Security</b></summary>
+
+*   **Customization**: Currency types, financial cycles, themes, and biometric or PIN lock capabilities.
+</details>
+
+<details>
+<summary><b>Phase 15 — Future Expansion</b></summary>
+
+*   **Advanced Tools**: Family shared plans, multi-account integrations, OCR receipt scanner, tax estimators, and companion app widgets (Wear OS/Apple Watch).
+</details>
+
+---
+
 ## 🛠️ Tech Stack & Architecture
 
 ```mermaid
