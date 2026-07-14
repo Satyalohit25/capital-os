@@ -53,6 +53,8 @@ function Page() {
           dueDay: 1,
           priority: 3,
         })}
+        markPaidKey={(item) => `debt:${item.id}`}
+        defaultPaidAmount={(item) => item.emi}
       />
     </PageShell>
   );

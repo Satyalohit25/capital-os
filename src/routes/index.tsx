@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { PageShell } from "@/components/page-shell";
 import { useFinance } from "@/store/finance-store";
 import {
@@ -23,6 +23,11 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Your financial overview: cash, debt, forecast, and path to zero." },
     ],
   }),
+  beforeLoad: () => {
+    if (!useFinance.getState().settings.onboarded) {
+      throw redirect({ to: "/onboarding" });
+    }
+  },
   component: Dashboard,
 });
 

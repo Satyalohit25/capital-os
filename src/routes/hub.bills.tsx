@@ -36,6 +36,8 @@ function Page() {
           },
         ]}
         makeEmpty={() => ({ name: "", amount: 0, dueDay: 1, category: "essential", autoPay: false })}
+        markPaidKey={(item) => `bill:${item.id}`}
+        defaultPaidAmount={(item) => item.amount}
       />
     </PageShell>
   );
