@@ -26,6 +26,7 @@ export function AmountInput({ id, value, onChange }: AmountInputProps) {
       inputMode="numeric"
       value={display}
       placeholder="0"
+      className="font-mono"
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
       onChange={(e) => {

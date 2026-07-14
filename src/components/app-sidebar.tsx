@@ -11,32 +11,58 @@ import {
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useFinance } from "@/store/finance-store";
+import {
+  LayoutDashboard,
+  Wallet,
+  ArrowUpRight,
+  Receipt,
+  Percent,
+  CreditCard,
+  PiggyBank,
+  TrendingUp,
+  Coins,
+  ListTodo,
+  Sparkles,
+  Settings,
+  Lock,
+} from "lucide-react";
+import * as React from "react";
 
-const primary = [{ title: "Dashboard", to: "/" }];
+interface SidebarItem {
+  title: string;
+  to: string;
+  icon: React.ComponentType<{ className?: string }>;
+}
 
-const hub = [
-  { title: "Overview", to: "/hub" },
-  { title: "Income", to: "/hub/income" },
-  { title: "Bills", to: "/hub/bills" },
-  { title: "Debts", to: "/hub/debts" },
-  { title: "Credit Lines", to: "/hub/credit" },
-  { title: "Savings", to: "/hub/savings" },
-  { title: "Investments", to: "/hub/investments" },
-  { title: "Assets", to: "/hub/assets" },
+interface LockedSidebarItem extends SidebarItem {
+  phase: string;
+}
+
+const primary: SidebarItem[] = [{ title: "Dashboard", to: "/", icon: LayoutDashboard }];
+
+const hub: SidebarItem[] = [
+  { title: "Overview", to: "/hub", icon: Wallet },
+  { title: "Income", to: "/hub/income", icon: ArrowUpRight },
+  { title: "Bills", to: "/hub/bills", icon: Receipt },
+  { title: "Debts", to: "/hub/debts", icon: Percent },
+  { title: "Credit Lines", to: "/hub/credit", icon: CreditCard },
+  { title: "Savings", to: "/hub/savings", icon: PiggyBank },
+  { title: "Investments", to: "/hub/investments", icon: TrendingUp },
+  { title: "Assets", to: "/hub/assets", icon: Coins },
 ];
 
-const planning = [
-  { title: "Monthly Planner", to: "/planner" },
-  { title: "Forecast Engine", to: "/forecast" },
+const planning: SidebarItem[] = [
+  { title: "Monthly Planner", to: "/planner", icon: ListTodo },
+  { title: "Forecast Engine", to: "/forecast", icon: Sparkles },
 ];
 
-const locked = [
-  { title: "Debt Strategy", to: "/debt-strategy", phase: "Phase 4" },
-  { title: "Goal Planner", to: "/goals", phase: "Phase 5" },
-  { title: "Analytics", to: "/analytics", phase: "Phase 6" },
-  { title: "Reports", to: "/reports", phase: "Phase 7" },
-  { title: "AI Advisor", to: "/advisor", phase: "Phase 8" },
-  { title: "History", to: "/history", phase: "Phase 9" },
+const locked: LockedSidebarItem[] = [
+  { title: "Debt Strategy", to: "/debt-strategy", phase: "Phase 4", icon: Lock },
+  { title: "Goal Planner", to: "/goals", phase: "Phase 5", icon: Lock },
+  { title: "Analytics", to: "/analytics", phase: "Phase 6", icon: Lock },
+  { title: "Reports", to: "/reports", phase: "Phase 7", icon: Lock },
+  { title: "AI Advisor", to: "/advisor", phase: "Phase 8", icon: Lock },
+  { title: "History", to: "/history", phase: "Phase 9", icon: Lock },
 ];
 
 export function AppSidebar() {
@@ -51,45 +77,53 @@ export function AppSidebar() {
     .slice(0, 2)
     .toUpperCase();
 
-  const renderItem = (item: { title: string; to: string }) => (
-    <SidebarMenuItem key={item.to}>
-      <SidebarMenuButton asChild isActive={isActive(item.to)}>
-        <Link
-          to={item.to}
-          className="flex items-center gap-3 text-sm text-neutral-600 hover:text-neutral-900 data-[active=true]:bg-neutral-100 data-[active=true]:text-neutral-900"
-        >
-          <span className="size-1.5 shrink-0 rounded-full border border-neutral-300" />
-          <span>{item.title}</span>
-        </Link>
-      </SidebarMenuButton>
-    </SidebarMenuItem>
-  );
+  const renderItem = (item: SidebarItem) => {
+    const Icon = item.icon;
+    return (
+      <SidebarMenuItem key={item.to}>
+        <SidebarMenuButton asChild isActive={isActive(item.to)}>
+          <Link
+            to={item.to}
+            className="flex items-center gap-3 text-sm text-neutral-600 hover:text-neutral-900 data-[active=true]:bg-neutral-100 data-[active=true]:text-neutral-900"
+          >
+            <Icon className="size-4 shrink-0 text-neutral-400 group-hover:text-neutral-900 group-data-[active=true]:text-neutral-900" />
+            <span>{item.title}</span>
+          </Link>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    );
+  };
 
   return (
     <Sidebar collapsible="icon" className="border-r border-neutral-950/5 bg-neutral-50">
       <SidebarContent className="p-4">
+        {/* Primary Navigation */}
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {primary.map((item) => (
-                <SidebarMenuItem key={item.to}>
-                  <SidebarMenuButton asChild isActive={isActive(item.to)}>
-                    <Link
-                      to={item.to}
-                      className="flex items-center gap-3 text-sm font-medium text-neutral-900 data-[active=true]:bg-neutral-100"
-                    >
-                      <span className="size-4 shrink-0 rounded-full bg-[--color-accent]" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {primary.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <SidebarMenuItem key={item.to}>
+                    <SidebarMenuButton asChild isActive={isActive(item.to)}>
+                      <Link
+                        to={item.to}
+                        className="flex items-center gap-3 text-sm font-medium text-neutral-900 data-[active=true]:bg-neutral-100 data-[active=true]:text-neutral-900"
+                      >
+                        <Icon className="size-4 shrink-0 text-[--color-accent]" />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
+        {/* Financial Hub */}
         <SidebarGroup>
-          <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+          <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
             Financial Hub
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -97,8 +131,9 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
+        {/* Planning */}
         <SidebarGroup>
-          <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+          <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
             Planning
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -106,40 +141,43 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
+        {/* Coming Soon / Locked */}
         <SidebarGroup>
-          <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+          <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
             Coming Soon
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {locked.map((item) => (
-                <SidebarMenuItem key={item.to}>
-                  <SidebarMenuButton asChild isActive={isActive(item.to)}>
-                    <Link
-                      to={item.to}
-                      className="group flex items-center justify-between gap-3 text-sm text-neutral-400 hover:text-neutral-600"
-                    >
-                      <span className="flex items-center gap-3">
-                        <span className="h-2 w-16 rounded bg-neutral-200 group-hover:bg-neutral-300" />
+              {locked.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <SidebarMenuItem key={item.to}>
+                    <SidebarMenuButton asChild disabled>
+                      <span className="flex items-center justify-between w-full gap-3 text-sm text-neutral-400 cursor-not-allowed">
+                        <span className="flex items-center gap-3">
+                          <Icon className="size-4 shrink-0 text-neutral-300" />
+                          <span>{item.title}</span>
+                        </span>
+                        <span className="text-[8px] uppercase tracking-widest text-neutral-300 bg-neutral-100 px-1.5 py-0.5 rounded font-mono">
+                          {item.phase}
+                        </span>
                       </span>
-                      <span className="text-[9px] uppercase tracking-widest text-neutral-300">
-                        {item.phase}
-                      </span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Settings — unlocked */}
+        {/* Settings */}
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>{renderItem({ title: "Settings", to: "/settings" })}</SidebarMenu>
+            <SidebarMenu>{renderItem({ title: "Settings", to: "/settings", icon: Settings })}</SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
+        {/* User Info Foot */}
         <div className="mt-auto border-t border-neutral-950/5 pt-4">
           <Link to="/settings" className="flex items-center gap-3 px-3 hover:opacity-80">
             <Avatar className="size-8">
