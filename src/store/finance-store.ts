@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -80,11 +81,21 @@ export interface Asset {
 
 export type Strategy = "snowball" | "avalanche";
 
+export interface PaymentRecord {
+  paid: boolean;
+  paidDate?: string; // ISO date
+  paidAmount?: number;
+}
+
 export interface Settings {
   currency: "INR";
   strategy: Strategy;
   month: string; // YYYY-MM
   extraPayment: number;
+  profileName: string;
+  avatarUrl?: string;
+  onboarded: boolean;
+  theme: "light" | "dark" | "system";
 }
 
 interface State {
@@ -96,7 +107,7 @@ interface State {
   investments: Investment[];
   assets: Asset[];
   settings: Settings;
-  checklist: Record<string, boolean>; // key: `${month}:${id}`
+  checklist: Record<string, PaymentRecord>; // key: `${month}:${kind}:${id}`
 
   addItem: <K extends CollectionKey>(k: K, item: Collections[K][number]) => void;
   updateItem: <K extends CollectionKey>(
@@ -106,7 +117,9 @@ interface State {
   ) => void;
   removeItem: (k: CollectionKey, id: string) => void;
   setSettings: (patch: Partial<Settings>) => void;
-  toggleChecklist: (key: string) => void;
+  markPaid: (key: string, record: PaymentRecord) => void;
+  clearPaid: (key: string) => void;
+  clearCollections: () => void;
   resetSeed: () => void;
 }
 
@@ -130,10 +143,31 @@ const seed = () => ({
   ] as IncomeSource[],
   bills: [
     { id: uid(), name: "Rent", amount: 32000, dueDay: 5, category: "essential", autoPay: false },
-    { id: uid(), name: "Electricity", amount: 3200, dueDay: 12, category: "utility", autoPay: true },
+    {
+      id: uid(),
+      name: "Electricity",
+      amount: 3200,
+      dueDay: 12,
+      category: "utility",
+      autoPay: true,
+    },
     { id: uid(), name: "Broadband", amount: 1499, dueDay: 18, category: "utility", autoPay: true },
-    { id: uid(), name: "Groceries", amount: 12000, dueDay: 1, category: "variable", autoPay: false },
-    { id: uid(), name: "Netflix", amount: 649, dueDay: 22, category: "subscription", autoPay: true },
+    {
+      id: uid(),
+      name: "Groceries",
+      amount: 12000,
+      dueDay: 1,
+      category: "variable",
+      autoPay: false,
+    },
+    {
+      id: uid(),
+      name: "Netflix",
+      amount: 649,
+      dueDay: 22,
+      category: "subscription",
+      autoPay: true,
+    },
   ] as Bill[],
   debts: [
     {
@@ -209,6 +243,16 @@ const seed = () => ({
   ] as Asset[],
 });
 
+const emptyCollections = () => ({
+  income: [] as IncomeSource[],
+  bills: [] as Bill[],
+  debts: [] as Debt[],
+  creditLines: [] as CreditLine[],
+  savings: [] as SavingsGoal[],
+  investments: [] as Investment[],
+  assets: [] as Asset[],
+});
+
 export const useFinance = create<State>()(
   persist(
     (set) => ({
@@ -218,11 +262,16 @@ export const useFinance = create<State>()(
         strategy: "snowball",
         month: new Date().toISOString().slice(0, 7),
         extraPayment: 10000,
+        profileName: "Arjun Mehta",
+        onboarded: false,
+        theme: "system",
       },
       checklist: {},
 
       addItem: (k, item) =>
-        set((s) => ({ [k]: [...(s[k] as any[]), { ...item, id: (item as any).id || uid() }] }) as any),
+        set(
+          (s) => ({ [k]: [...(s[k] as any[]), { ...item, id: (item as any).id || uid() }] }) as any,
+        ),
       updateItem: (k, id, patch) =>
         set(
           (s) =>
@@ -233,11 +282,34 @@ export const useFinance = create<State>()(
       removeItem: (k, id) =>
         set((s) => ({ [k]: (s[k] as any[]).filter((it) => it.id !== id) }) as any),
       setSettings: (patch) => set((s) => ({ settings: { ...s.settings, ...patch } })),
-      toggleChecklist: (key) =>
-        set((s) => ({ checklist: { ...s.checklist, [key]: !s.checklist[key] } })),
-      resetSeed: () => set(() => ({ ...seed(), checklist: {} })),
+      markPaid: (key, record) => set((s) => ({ checklist: { ...s.checklist, [key]: record } })),
+      clearPaid: (key) =>
+        set((s) => {
+          const next = { ...s.checklist };
+          delete next[key];
+          return { checklist: next };
+        }),
+      clearCollections: () => set(() => ({ ...emptyCollections(), checklist: {} })),
+      // resetSeed intentionally preserves settings (including onboarded, profileName, theme)
+      resetSeed: () => set((s) => ({ ...seed(), checklist: {}, settings: s.settings })),
     }),
-    { name: "fin-os:v1" },
+    {
+      name: "fin-os:v1",
+      version: 2,
+      migrate(persisted: any, version) {
+        if (version < 2) {
+          // Upgrade boolean checklist values to PaymentRecord
+          const old = persisted?.state?.checklist ?? {};
+          const upgraded: Record<string, PaymentRecord> = {};
+          for (const [k, v] of Object.entries(old)) {
+            if (v === true) upgraded[k] = { paid: true };
+            // false → drop (same as unchecked)
+          }
+          return { ...persisted, state: { ...persisted.state, checklist: upgraded } };
+        }
+        return persisted;
+      },
+    },
   ),
 );
 

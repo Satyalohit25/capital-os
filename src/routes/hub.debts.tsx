@@ -11,7 +11,11 @@ export const Route = createFileRoute("/hub/debts")({
 function Page() {
   const items = useFinance((s) => s.debts);
   return (
-    <PageShell eyebrow="Financial Hub" title="Debt registry" description="Every liability with its principal, EMI, APR, and priority.">
+    <PageShell
+      eyebrow="Financial Hub"
+      title="Debt registry"
+      description="Every liability with its principal, EMI, APR, and priority."
+    >
       <CollectionEditor<Debt>
         collectionKey="debts"
         items={items}
@@ -53,6 +57,8 @@ function Page() {
           dueDay: 1,
           priority: 3,
         })}
+        markPaidKey={(item) => `debt:${item.id}`}
+        defaultPaidAmount={(item) => item.emi}
       />
     </PageShell>
   );

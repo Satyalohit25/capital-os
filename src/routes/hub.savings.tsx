@@ -11,7 +11,11 @@ export const Route = createFileRoute("/hub/savings")({
 function Page() {
   const items = useFinance((s) => s.savings);
   return (
-    <PageShell eyebrow="Financial Hub" title="Savings goals" description="Emergency fund, vacation, house — everything you're building toward.">
+    <PageShell
+      eyebrow="Financial Hub"
+      title="Savings goals"
+      description="Emergency fund, vacation, house — everything you're building toward."
+    >
       <CollectionEditor<SavingsGoal>
         collectionKey="savings"
         items={items}

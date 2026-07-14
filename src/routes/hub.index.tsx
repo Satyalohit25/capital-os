@@ -17,13 +17,48 @@ function HubIndex() {
   const s = useFinance();
 
   const tiles = [
-    { to: "/hub/income", label: "Income", value: formatINR(monthlyIncome(s.income)) + " / mo", count: s.income.length },
-    { to: "/hub/bills", label: "Bills", value: formatINR(monthlyBills(s.bills)) + " / mo", count: s.bills.length },
-    { to: "/hub/debts", label: "Debts", value: formatINR(s.debts.reduce((a, d) => a + d.remaining, 0)), count: s.debts.length },
-    { to: "/hub/credit", label: "Credit Lines", value: formatINR(s.creditLines.reduce((a, c) => a + c.used, 0)), count: s.creditLines.length },
-    { to: "/hub/savings", label: "Savings", value: formatINR(s.savings.reduce((a, g) => a + g.current, 0)), count: s.savings.length },
-    { to: "/hub/investments", label: "Investments", value: formatINR(s.investments.reduce((a, i) => a + i.currentValue, 0)), count: s.investments.length },
-    { to: "/hub/assets", label: "Assets", value: formatINR(s.assets.reduce((a, x) => a + x.value, 0)), count: s.assets.length },
+    {
+      to: "/hub/income",
+      label: "Income",
+      value: formatINR(monthlyIncome(s.income)) + " / mo",
+      count: s.income.length,
+    },
+    {
+      to: "/hub/bills",
+      label: "Bills",
+      value: formatINR(monthlyBills(s.bills)) + " / mo",
+      count: s.bills.length,
+    },
+    {
+      to: "/hub/debts",
+      label: "Debts",
+      value: formatINR(s.debts.reduce((a, d) => a + d.remaining, 0)),
+      count: s.debts.length,
+    },
+    {
+      to: "/hub/credit",
+      label: "Credit Lines",
+      value: formatINR(s.creditLines.reduce((a, c) => a + c.used, 0)),
+      count: s.creditLines.length,
+    },
+    {
+      to: "/hub/savings",
+      label: "Savings",
+      value: formatINR(s.savings.reduce((a, g) => a + g.current, 0)),
+      count: s.savings.length,
+    },
+    {
+      to: "/hub/investments",
+      label: "Investments",
+      value: formatINR(s.investments.reduce((a, i) => a + i.currentValue, 0)),
+      count: s.investments.length,
+    },
+    {
+      to: "/hub/assets",
+      label: "Assets",
+      value: formatINR(s.assets.reduce((a, x) => a + x.value, 0)),
+      count: s.assets.length,
+    },
   ] as const;
 
   return (

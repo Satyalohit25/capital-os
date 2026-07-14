@@ -16,7 +16,10 @@ export const Route = createFileRoute("/planner")({
   head: () => ({
     meta: [
       { title: "Monthly Planner — Capital OS" },
-      { name: "description", content: "This month's cash waterfall, calendar, and payment checklist." },
+      {
+        name: "description",
+        content: "This month's cash waterfall, calendar, and payment checklist.",
+      },
     ],
   }),
   component: Planner,
@@ -88,19 +91,33 @@ function Planner() {
           <div className="space-y-3">
             {dues.slice(0, 8).map((d) => {
               const key = `${month}:${d.kind}:${d.id}`;
-              const done = !!s.checklist[key];
+              const done = !!s.checklist[key]?.paid;
               return (
                 <label
                   key={key}
                   className="flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 hover:bg-neutral-100"
                 >
                   <div className="flex items-center gap-3">
-                    <Checkbox checked={done} onCheckedChange={() => s.toggleChecklist(key)} />
+                    <Checkbox
+                      checked={done}
+                      onCheckedChange={() =>
+                        done
+                          ? s.clearPaid(key)
+                          : s.markPaid(key, {
+                              paid: true,
+                              paidDate: new Date().toISOString().slice(0, 10),
+                            })
+                      }
+                    />
                     <div>
-                      <div className={`text-sm ${done ? "text-neutral-400 line-through" : "text-neutral-900"}`}>
+                      <div
+                        className={`text-sm ${done ? "text-neutral-400 line-through" : "text-neutral-900"}`}
+                      >
                         {d.label}
                       </div>
-                      <div className="text-xs text-neutral-400">Due day {d.day} • {d.sub}</div>
+                      <div className="text-xs text-neutral-400">
+                        Due day {d.day} • {d.sub}
+                      </div>
                     </div>
                   </div>
                   <div className="font-serif tabular-nums text-neutral-900">

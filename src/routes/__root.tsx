@@ -8,6 +8,8 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Sun, Moon, Monitor } from "lucide-react";
+import { useFinance } from "@/store/finance-store";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -118,6 +120,31 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { settings, setSettings } = useFinance();
+  const theme = settings.theme;
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === "dark") {
+      root.classList.add("dark");
+    } else if (theme === "light") {
+      root.classList.remove("dark");
+    } else {
+      // system
+      const mq = window.matchMedia("(prefers-color-scheme: dark)");
+      root.classList.toggle("dark", mq.matches);
+      const handler = (e: MediaQueryListEvent) => root.classList.toggle("dark", e.matches);
+      mq.addEventListener("change", handler);
+      return () => mq.removeEventListener("change", handler);
+    }
+  }, [theme]);
+
+  const cycleTheme = () => {
+    const next = theme === "light" ? "dark" : theme === "dark" ? "system" : "light";
+    setSettings({ theme: next });
+  };
+
+  const ThemeIcon = theme === "dark" ? Moon : theme === "light" ? Sun : Monitor;
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -125,8 +152,21 @@ function RootComponent() {
         <div className="flex min-h-screen w-full bg-neutral-50 text-neutral-900">
           <AppSidebar />
           <div className="flex-1">
-            <header className="flex h-10 items-center border-b border-neutral-950/5 px-3 md:hidden">
-              <SidebarTrigger />
+            <header className="flex h-14 items-center border-b border-neutral-950/5 px-3">
+              <SidebarTrigger className="md:hidden" />
+              <div className="flex-1 text-center">
+                <span className="text-[10px] font-semibold uppercase tracking-widest text-neutral-400">
+                  Capital OS ·{" "}
+                </span>
+                <span className="font-serif text-lg italic text-neutral-900">Vanguard Edition</span>
+              </div>
+              <button
+                onClick={cycleTheme}
+                className="ml-auto rounded-md p-1.5 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-900"
+                title={`Theme: ${theme}`}
+              >
+                <ThemeIcon className="h-4 w-4" />
+              </button>
             </header>
             <Outlet />
           </div>

@@ -11,7 +11,11 @@ export const Route = createFileRoute("/hub/bills")({
 function Page() {
   const items = useFinance((s) => s.bills);
   return (
-    <PageShell eyebrow="Financial Hub" title="Monthly bills" description="Recurring commitments, essentials, and subscriptions.">
+    <PageShell
+      eyebrow="Financial Hub"
+      title="Monthly bills"
+      description="Recurring commitments, essentials, and subscriptions."
+    >
       <CollectionEditor<Bill>
         collectionKey="bills"
         items={items}
@@ -35,7 +39,15 @@ function Page() {
             ],
           },
         ]}
-        makeEmpty={() => ({ name: "", amount: 0, dueDay: 1, category: "essential", autoPay: false })}
+        makeEmpty={() => ({
+          name: "",
+          amount: 0,
+          dueDay: 1,
+          category: "essential",
+          autoPay: false,
+        })}
+        markPaidKey={(item) => `bill:${item.id}`}
+        defaultPaidAmount={(item) => item.amount}
       />
     </PageShell>
   );

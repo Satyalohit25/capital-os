@@ -9,6 +9,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { useFinance } from "@/store/finance-store";
 
 const primary = [{ title: "Dashboard", to: "/" }];
 
@@ -35,12 +37,19 @@ const locked = [
   { title: "Reports", to: "/reports", phase: "Phase 7" },
   { title: "AI Advisor", to: "/advisor", phase: "Phase 8" },
   { title: "History", to: "/history", phase: "Phase 9" },
-  { title: "Settings", to: "/settings", phase: "Phase 14" },
 ];
 
 export function AppSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isActive = (p: string) => (p === "/" ? pathname === "/" : pathname === p);
+  const { settings } = useFinance();
+
+  const initials = settings.profileName
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   const renderItem = (item: { title: string; to: string }) => (
     <SidebarMenuItem key={item.to}>
@@ -59,13 +68,6 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r border-neutral-950/5 bg-neutral-50">
       <SidebarContent className="p-4">
-        <div className="mb-8 px-2">
-          <div className="text-[10px] font-semibold uppercase tracking-widest text-neutral-400">
-            Capital OS
-          </div>
-          <div className="font-serif text-lg italic text-neutral-900">Vanguard Edition</div>
-        </div>
-
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -131,11 +133,25 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
+        {/* Settings — unlocked */}
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>{renderItem({ title: "Settings", to: "/settings" })}</SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
         <div className="mt-auto border-t border-neutral-950/5 pt-4">
-          <div className="flex items-center gap-3 px-3">
-            <div className="size-8 rounded-full bg-neutral-200 outline outline-1 -outline-offset-1 outline-black/5" />
-            <div className="text-sm font-medium text-neutral-900">Arjun Mehta</div>
-          </div>
+          <Link to="/settings" className="flex items-center gap-3 px-3 hover:opacity-80">
+            <Avatar className="size-8">
+              {settings.avatarUrl && (
+                <AvatarImage src={settings.avatarUrl} alt={settings.profileName} />
+              )}
+              <AvatarFallback className="bg-neutral-200 text-xs text-neutral-600 outline outline-1 -outline-offset-1 outline-black/5">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+            <div className="text-sm font-medium text-neutral-900">{settings.profileName}</div>
+          </Link>
         </div>
       </SidebarContent>
     </Sidebar>

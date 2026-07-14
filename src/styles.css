@@ -51,8 +51,6 @@
   --color-accent: #166534;
 }
 
-
-
 @custom-variant dark (&:is(.dark *));
 
 /*
@@ -195,4 +193,3 @@
     font-feature-settings: "cv11", "ss01";
   }
 }
-

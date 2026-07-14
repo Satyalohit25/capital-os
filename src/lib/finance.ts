@@ -34,8 +34,7 @@ export const monthlyIncome = (income: IncomeSource[]) =>
 
 export const monthlyBills = (bills: Bill[]) => bills.reduce((s, b) => s + b.amount, 0);
 export const monthlyEMI = (debts: Debt[]) => debts.reduce((s, d) => s + d.emi, 0);
-export const monthlyCreditMin = (cls: CreditLine[]) =>
-  cls.reduce((s, c) => s + c.minPayment, 0);
+export const monthlyCreditMin = (cls: CreditLine[]) => cls.reduce((s, c) => s + c.minPayment, 0);
 export const monthlySavings = (gs: SavingsGoal[]) => gs.reduce((s, g) => s + g.monthly, 0);
 
 export const totalDebt = (debts: Debt[], cls: CreditLine[]) =>
@@ -58,11 +57,7 @@ export const netWorth = (
   cls: CreditLine[],
 ) => totalAssetsValue(assets, investments, savings) - totalDebt(debts, cls);
 
-export const emergencyFundMonths = (
-  savings: SavingsGoal[],
-  bills: Bill[],
-  debts: Debt[],
-) => {
+export const emergencyFundMonths = (savings: SavingsGoal[], bills: Bill[], debts: Debt[]) => {
   const monthlyBurn = monthlyBills(bills) + monthlyEMI(debts);
   const ef = savings.find((s) => s.isEmergency)?.current ?? 0;
   if (!monthlyBurn) return 0;
@@ -83,7 +78,10 @@ export function healthScore(args: {
   const efMonths = emergencyFundMonths(args.savings, args.bills, args.debts);
   const util =
     args.creditLines.reduce((s, c) => s + c.used, 0) /
-    Math.max(1, args.creditLines.reduce((s, c) => s + c.limit, 0));
+    Math.max(
+      1,
+      args.creditLines.reduce((s, c) => s + c.limit, 0),
+    );
 
   const dtiScore = Math.max(0, 1 - dti / 0.4) * 30;
   const savScore = Math.min(1, sav / 0.2) * 25;
@@ -97,17 +95,11 @@ export const availableCash = (
   bills: Bill[],
   debts: Debt[],
   cls: CreditLine[],
-) =>
-  monthlyIncome(income) -
-  monthlyBills(bills) -
-  monthlyEMI(debts) -
-  monthlyCreditMin(cls);
+) => monthlyIncome(income) - monthlyBills(bills) - monthlyEMI(debts) - monthlyCreditMin(cls);
 
 // Sort debts by chosen strategy — snowball = smallest remaining first, avalanche = highest APR first
 const sortForStrategy = (debts: Debt[], strategy: Strategy) =>
-  [...debts].sort((a, b) =>
-    strategy === "snowball" ? a.remaining - b.remaining : b.apr - a.apr,
-  );
+  [...debts].sort((a, b) => (strategy === "snowball" ? a.remaining - b.remaining : b.apr - a.apr));
 
 interface ForecastPoint {
   month: number;
@@ -179,11 +171,7 @@ export interface DueItem {
   kind: "bill" | "debt" | "credit";
 }
 
-export function upcomingDues(
-  bills: Bill[],
-  debts: Debt[],
-  cls: CreditLine[],
-): DueItem[] {
+export function upcomingDues(bills: Bill[], debts: Debt[], cls: CreditLine[]): DueItem[] {
   const items: DueItem[] = [
     ...bills.map<DueItem>((b) => ({
       id: b.id,

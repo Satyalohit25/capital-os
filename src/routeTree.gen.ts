@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as PlannerRouteImport } from './routes/planner'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as HubRouteImport } from './routes/hub'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as GoalsRouteImport } from './routes/goals'
@@ -42,6 +43,11 @@ const ReportsRoute = ReportsRouteImport.update({
 const PlannerRoute = PlannerRouteImport.update({
   id: '/planner',
   path: '/planner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HubRoute = HubRouteImport.update({
@@ -134,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/goals': typeof GoalsRoute
   '/history': typeof HistoryRoute
   '/hub': typeof HubRouteWithChildren
+  '/onboarding': typeof OnboardingRoute
   '/planner': typeof PlannerRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
@@ -154,6 +161,7 @@ export interface FileRoutesByTo {
   '/forecast': typeof ForecastRoute
   '/goals': typeof GoalsRoute
   '/history': typeof HistoryRoute
+  '/onboarding': typeof OnboardingRoute
   '/planner': typeof PlannerRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
@@ -176,6 +184,7 @@ export interface FileRoutesById {
   '/goals': typeof GoalsRoute
   '/history': typeof HistoryRoute
   '/hub': typeof HubRouteWithChildren
+  '/onboarding': typeof OnboardingRoute
   '/planner': typeof PlannerRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
@@ -199,6 +208,7 @@ export interface FileRouteTypes {
     | '/goals'
     | '/history'
     | '/hub'
+    | '/onboarding'
     | '/planner'
     | '/reports'
     | '/settings'
@@ -219,6 +229,7 @@ export interface FileRouteTypes {
     | '/forecast'
     | '/goals'
     | '/history'
+    | '/onboarding'
     | '/planner'
     | '/reports'
     | '/settings'
@@ -240,6 +251,7 @@ export interface FileRouteTypes {
     | '/goals'
     | '/history'
     | '/hub'
+    | '/onboarding'
     | '/planner'
     | '/reports'
     | '/settings'
@@ -262,6 +274,7 @@ export interface RootRouteChildren {
   GoalsRoute: typeof GoalsRoute
   HistoryRoute: typeof HistoryRoute
   HubRoute: typeof HubRouteWithChildren
+  OnboardingRoute: typeof OnboardingRoute
   PlannerRoute: typeof PlannerRoute
   ReportsRoute: typeof ReportsRoute
   SettingsRoute: typeof SettingsRoute
@@ -288,6 +301,13 @@ declare module '@tanstack/react-router' {
       path: '/planner'
       fullPath: '/planner'
       preLoaderRoute: typeof PlannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hub': {
@@ -438,6 +458,7 @@ const rootRouteChildren: RootRouteChildren = {
   GoalsRoute: GoalsRoute,
   HistoryRoute: HistoryRoute,
   HubRoute: HubRouteWithChildren,
+  OnboardingRoute: OnboardingRoute,
   PlannerRoute: PlannerRoute,
   ReportsRoute: ReportsRoute,
   SettingsRoute: SettingsRoute,
@@ -445,3 +466,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

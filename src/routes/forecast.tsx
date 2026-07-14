@@ -1,13 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/page-shell";
 import { useFinance } from "@/store/finance-store";
-import {
-  debtFreeDate,
-  formatINR,
-  forecastAt,
-  monthsToZero,
-  simulateDebts,
-} from "@/lib/finance";
+import { debtFreeDate, formatINR, forecastAt, monthsToZero, simulateDebts } from "@/lib/finance";
 import { Slider } from "@/components/ui/slider";
 import { useMemo } from "react";
 
@@ -33,7 +27,7 @@ function Forecast() {
 
   const perDebtPayoff = (strat: "snowball" | "avalanche") => {
     const state = s.debts.map((d) => ({ ...d, payoff: 0 }));
-    let extraLeft = extra;
+    const extraLeft = extra;
     const maxMonths = 240;
     for (let m = 1; m <= maxMonths; m++) {
       let e = extraLeft;
@@ -75,7 +69,9 @@ function Forecast() {
               key={v}
               onClick={() => s.setSettings({ strategy: v })}
               className={`px-4 py-2 text-sm capitalize transition-colors ${
-                strategy === v ? "bg-neutral-900 text-white" : "bg-white text-neutral-500 hover:text-neutral-900"
+                strategy === v
+                  ? "bg-neutral-900 text-white"
+                  : "bg-white text-neutral-500 hover:text-neutral-900"
               }`}
             >
               {v}
@@ -152,10 +148,14 @@ function Forecast() {
                   </td>
                   <td className="px-4 py-3 text-right tabular-nums">{formatINR(d.remaining)}</td>
                   <td className="px-4 py-3 text-right tabular-nums text-neutral-500">{d.apr}%</td>
-                  <td className={`px-4 py-3 text-right font-serif ${strategy === "snowball" ? "text-[--color-accent]" : "text-neutral-500"}`}>
+                  <td
+                    className={`px-4 py-3 text-right font-serif ${strategy === "snowball" ? "text-[--color-accent]" : "text-neutral-500"}`}
+                  >
                     {sm}mo
                   </td>
-                  <td className={`px-4 py-3 text-right font-serif ${strategy === "avalanche" ? "text-[--color-accent]" : "text-neutral-500"}`}>
+                  <td
+                    className={`px-4 py-3 text-right font-serif ${strategy === "avalanche" ? "text-[--color-accent]" : "text-neutral-500"}`}
+                  >
                     {am}mo
                   </td>
                 </tr>
@@ -177,7 +177,11 @@ function ForecastChart({
   aval: { month: number; totalRemaining: number }[];
   active: "snowball" | "avalanche";
 }) {
-  const maxMonth = Math.max(snow[snow.length - 1]?.month || 1, aval[aval.length - 1]?.month || 1, 12);
+  const maxMonth = Math.max(
+    snow[snow.length - 1]?.month || 1,
+    aval[aval.length - 1]?.month || 1,
+    12,
+  );
   const maxVal = Math.max(snow[0]?.totalRemaining || 1, aval[0]?.totalRemaining || 1);
   const W = 800;
   const H = 240;

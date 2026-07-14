@@ -11,7 +11,11 @@ export const Route = createFileRoute("/hub/income")({
 function Page() {
   const items = useFinance((s) => s.income);
   return (
-    <PageShell eyebrow="Financial Hub" title="Income sources" description="Salary, side gigs, bonuses, and expected income.">
+    <PageShell
+      eyebrow="Financial Hub"
+      title="Income sources"
+      description="Salary, side gigs, bonuses, and expected income."
+    >
       <CollectionEditor<IncomeSource>
         collectionKey="income"
         items={items}
