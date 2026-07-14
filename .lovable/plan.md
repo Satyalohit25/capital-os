@@ -1,105 +1,87 @@
-## Scope
+# Ship Capital OS as an Offline Windows Desktop App
 
-Build **Phase 1 (Dashboard + Financial Hub)**, **Phase 2 (Monthly Planner)**, and **Phase 3 (Forecast Engine)** as fully working screens. Ship **Phases 4–15** as real routes but locked skeleton placeholders so navigation feels complete.
+Your app already stores everything in `localStorage` under `fin-os:v1`, so it's a natural fit for a fully offline desktop build. We'll wrap the existing Vite build in Electron and produce a Windows executable you can double-click on your laptop — no server, no internet required.
 
-All data lives in `localStorage` under a single namespaced store — no backend, no auth. Currency is Indian Rupees with lakh/crore comma grouping (`en-IN`).
+## What you get
 
-## Visual Direction (locked from chosen prototype)
+- A `Capital OS.exe` (portable folder) that runs on Windows 10/11
+- 100% offline: data lives in the app's local storage on your machine
+- Same UI, same routes, same Editorial design — nothing visual changes
+- Optional native window chrome (custom title bar, app icon, min/max/close)
+- Auto-persistence: your finance data survives restarts (already does, just inside Electron now)
+- Scope for AI either have a api key or a offline model (local processing).
+- Install the required fonts and requirments by mentioning them in installer with user's access.
 
-- Palette: `neutral-50` canvas, `neutral-900` ink, single accent `#166534` (deep green), red-600 for high-priority.
-- Type: **Instrument Serif** for display/numbers, **Inter** for body. Loaded via `<link>` in `__root.tsx` head.
-- Layout: fixed left sidebar (256px) + generously padded main column, max-w-6xl. Serif KPI numbers. Hairline dividers (`neutral-950/5`) instead of card borders.
-- Editorial calm — no gradients, no drop shadows beyond `ring-1 ring-black/5`.
+## Plan
 
-## Route Architecture
+### 1. Vite tweak (required for Electron)
 
-```
-src/routes/
-  __root.tsx                 → shell: SidebarProvider + AppSidebar + <Outlet/>
-  index.tsx                  → Dashboard
-  hub.tsx                    → Financial Hub layout (<Outlet/>)
-  hub.index.tsx              → Hub overview
-  hub.income.tsx
-  hub.bills.tsx
-  hub.debts.tsx
-  hub.credit.tsx
-  hub.savings.tsx
-  hub.investments.tsx
-  hub.assets.tsx
-  planner.tsx                → Monthly Planner
-  forecast.tsx               → Forecast Engine
-  debt-strategy.tsx          → LOCKED (skeleton)
-  goals.tsx                  → LOCKED
-  analytics.tsx              → LOCKED
-  reports.tsx                → LOCKED
-  advisor.tsx                → LOCKED
-  history.tsx                → LOCKED
-  settings.tsx               → LOCKED
-```
+Set `base: './'` in `vite.config.ts` so built assets load under `file://`. Without this the window is blank white.
 
-Each route sets its own `head()` title/description. Locked routes render a shared `<LockedModule name="…" phase="Phase N" />` component (grayed skeleton bars + "Coming in Phase N" chip).
+### 2. Electron shell
 
-## Data Model (localStorage)
+Add two files under `electron/`:
 
-Single store `fin-os:v1` (Zustand + persist middleware) with slices:
+- `electron/main.cjs` — creates a `BrowserWindow` (1400×900, min 1100×720), loads `dist/index.html`, sets `contextIsolation: true`, `nodeIntegration: false`, disables the default menu bar for a cleaner look, and adds an app icon.
+- `electron/preload.cjs` — empty for now, reserved for future native features (file export, notifications).
 
-```ts
-{
-  income:      IncomeSource[]     // {id, name, amount, frequency, type}
-  bills:       Bill[]             // {id, name, amount, dueDay, category, autoPay}
-  debts:       Debt[]             // {id, name, lender, original, remaining, emi, apr, dueDay, priority}
-  creditLines: CreditLine[]       // {id, name, limit, used, statementDay, dueDay, minPayment}
-  savings:     SavingsGoal[]      // {id, name, target, current, monthly, deadline}
-  investments: Investment[]       // {id, name, type, invested, currentValue}
-  assets:      Asset[]            // {id, name, category, value}
-  settings:    { currency: 'INR', strategy: 'snowball'|'avalanche', month: string }
-}
-```
+Set `"main": "electron/main.cjs"` in `package.json`.
 
-Seed with sample INR data on first load so the dashboard is populated immediately.
+### 3. Font handling for offline
 
-## Computed Selectors (pure functions in `src/lib/finance.ts`)
+`Instrument Serif` and `Inter` are currently loaded from Google Fonts in `__root.tsx`. Offline that fails and the editorial typography breaks. Fix by:
 
-- `healthScore()` — 0-100 from DTI, savings rate, emergency-fund months.
-- `availableCash()` = income − bills − minimum debt payments this month.
-- `totalDebt()`, `monthlyCommitments()`, `remainingCash()`.
-- `emergencyFundMonths()`.
-- `nextPayment()`, `upcomingDueDates(n)`.
-- `forecastDebt(months, strategy)` — projects total debt at +1/+3/+6/+12 months using snowball vs avalanche (applies free cash to highest-priority / highest-APR debt).
-- `daysToZero(strategy)`.
-- `formatINR(n)` → `₹ 1,42,800` using `Intl.NumberFormat('en-IN')`.
+- Downloading the two font families as `.woff2` into `src/assets/fonts/`
+- Declaring them via `@font-face` at the top of `src/styles.css`
+- Removing the Google Fonts `<link>` tags from `__root.tsx`
 
-## Screens
+### 4. Windows icon
 
-**Dashboard (`/`)** — Header with net worth + Run Forecast button. 4 KPI row (Health Score, Available Cash, Debt Remaining, Days to Zero). Forecast strip (+1/+3/+6/+12). Two-column: Active Liabilities list with APR + progress bar + EMI on left; Upcoming Commitments + Emergency Fund card on right. Exact composition of chosen prototype.
+Generate a `build/icon.ico` (256×256, multi-size) from a simple mark — I'll create a minimal editorial "C" wordmark unless you have art you want to use.
 
-**Financial Hub** — Overview page tiles into 7 sub-sections. Each sub-page = list + "Add" dialog (shadcn Dialog + react-hook-form + zod) + edit/delete row actions. Same editorial styling.
+### 5. Packaging
 
-**Monthly Planner (`/planner`)** — Waterfall list: Income → Mandatory Payments → Debt Payments → Savings → Investments → Lifestyle → Remaining Cash. Each row draggable priority order. Simple monthly calendar (grid) marking due dates from bills+debts. Payment checklist (checkboxes persisted per month).
+Use `@electron/packager` (electron-builder needs binaries this environment can't provide). Command produces `electron-release/Capital OS-win32-x64/` containing `Capital OS.exe` + all runtime files. We zip it to `Capital-OS-windows.zip` for download.
 
-**Forecast Engine (`/forecast`)** — Strategy toggle (Snowball / Avalanche). SVG line chart (custom, no chart lib) of projected total debt over 24 months. Table breakdown per debt showing payoff month under each strategy. Extra-payment slider that recomputes live.
+### 6. Data safety extras (offline "bells and whistles")
 
-**Locked routes** — shared skeleton component with shimmer bars matching sidebar style and a "Phase N — Coming soon" chip.
+Small, high-value additions that make it feel like a real desktop app:
 
-## Sidebar
+- **Backup / Restore** buttons on the Settings page — export the full `fin-os:v1` store to a `.json` file on disk and re-import it. Protects you if you reinstall Windows or move laptops.
+- **App menu → About / Reset seed / Quit** wired to the existing store actions.
+- **Remember window size & position** across launches (Electron `BrowserWindow` state persisted to a small file in userData).
 
-Adopt chosen prototype exactly: brand block "Capital OS / Vanguard Edition", grouped nav (Dashboard, Financial Hub with sub-items, Planning, then dim `opacity-30` locked bars for future modules). Active item uses `bg-neutral-100`. Collapsible via shadcn `Sidebar collapsible="icon"`.
+### 7. Verification
 
-## Files to add/change
+- Run `vite build` and confirm assets are relative-pathed
+- Launch the packaged `.exe` inside the sandbox via Wine? No — cross-run isn't reliable. Instead we sanity-check by running the Electron main against the built `dist/` on Linux headless and confirming it boots (proves the shell + build agree). You then run the produced Windows folder on your laptop.
 
-- `src/styles.css` — add `--font-serif`, `--font-sans`, `--color-accent: #166534` tokens; keep shadcn base.
-- `src/routes/__root.tsx` — replace title/description with "Capital OS — Personal Financial OS"; add Instrument Serif + Inter `<link>` tags; wrap children in `SidebarProvider` + `AppSidebar`.
-- `src/components/app-sidebar.tsx` — nav from route architecture above.
-- `src/components/locked-module.tsx` — skeleton placeholder.
-- `src/components/ui/*` — add shadcn `sidebar`, `dialog`, `input`, `label`, `button`, `progress`, `slider`, `select`, `tabs`, `checkbox` if missing.
-- `src/store/finance-store.ts` — Zustand persisted store + seed.
-- `src/lib/finance.ts` — selectors + INR formatter + forecast math.
-- All routes listed above.
+## Technical details
 
-## Out of scope (this pass)
+- Runtime: Electron (latest stable), CommonJS main process (`.cjs` because `package.json` is `type: "module"`)
+- Packager: `@electron/packager` with `--platform=win32 --arch=x64`
+- Bundle excludes `src/`, `public/`, `node_modules` dev deps
+- No code signing (unsigned `.exe` — Windows SmartScreen will show a "More info → Run anyway" prompt the first time; signing requires a paid cert, out of scope)
+- Output artifact: `/mnt/documents/Capital-OS-windows.zip` (downloadable)
+- Approx size: ~180–220 MB (Electron runtime; standard for this approach)
 
-Phases 4–15 beyond skeleton, auth/multi-user, bank integrations, notifications, mobile-specific UX, dark mode toggle. These slot in without changing the route tree.
+## Out of scope
 
-## Verification
+- Auto-updater (would need a hosted update server)
+- Code signing / notarization
+- MSI/EXE installer (portable folder only — electron-builder needed for installers, incompatible with sandbox)
+- macOS/Linux builds (can add later with the same tooling if you want them)
 
-After build, Playwright: load `/`, screenshot dashboard, click into `/hub/debts` add-a-debt flow, screenshot; visit `/planner` and `/forecast`; visit one locked route and confirm skeleton renders.
+## Files to create / edit
+
+- edit `vite.config.ts` — add `base: './'`
+- edit `src/routes/__root.tsx` — remove Google Fonts links
+- edit `src/styles.css` — add `@font-face` for local fonts
+- edit `src/routes/settings.tsx` — add Backup / Restore
+- edit `package.json` — add `main`, add electron devDeps
+- create `electron/main.cjs`
+- create `electron/preload.cjs`
+- create `build/icon.ico`
+- create `src/assets/fonts/*.woff2` (4 files: Inter regular+medium, Instrument Serif regular+italic)
+
+Ready to build when you approve.
