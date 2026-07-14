@@ -10,8 +10,3 @@
 > the editor, so keep the branch in a working state.
 
 <!-- LOVABLE:END -->
-
-Default working style
-
-For any coding, planning, or implementation task, follow
-.agent/skills/lazy-senior-dev/SKILL.md.

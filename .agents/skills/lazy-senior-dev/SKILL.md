@@ -51,7 +51,7 @@ analyze the same thing twice.
 
 ### Beelzebuth — analyzes, only when Raphael doesn't already have it
 
-- Reads the actual file, module, or requirement in front of you, in this
+- Reads the `.agent` files, actual file, module, or requirement in front of you, in this
   project, right now. This is the one-time cost of understanding something
   new — it should never be paid twice for the same thing.
 - Hands the result back to Raphael to remember. If you want something
