@@ -169,24 +169,24 @@ function Onboarding() {
         {step === 0 && (
           <>
             <div>
-              <h2 className="font-serif text-2xl text-neutral-900 tracking-tight">Define your monthly earnings</h2>
+              <h2 className="font-serif text-2xl text-neutral-900 tracking-tight">Enter your monthly income</h2>
               <p className="mt-1.5 text-sm text-neutral-500 leading-relaxed">
-                Establish your baseline cash flow. Enter your primary net take-home salary or recurring income.
+                Type your monthly take-home salary or regular income.
               </p>
             </div>
             <div className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Income Source Name</label>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Income name</label>
                 <Input
                   value={incomeLabel}
                   onChange={(e) => setIncomeLabel(e.target.value)}
-                  placeholder="e.g. Primary Salary"
+                  placeholder="e.g. Salary"
                   className="focus-visible:ring-neutral-950"
                 />
               </div>
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-                  Monthly Net Amount (₹)
+                  Monthly amount (₹)
                 </label>
                 <AmountInput value={incomeAmount} onChange={setIncomeAmount} />
               </div>
@@ -196,13 +196,13 @@ function Onboarding() {
                 onClick={skip}
                 className="text-xs font-semibold uppercase tracking-wider text-neutral-400 hover:text-neutral-900 transition-colors"
               >
-                Skip Setup
+                Skip
               </button>
               <Button
                 onClick={addIncomeAndNext}
                 className="bg-neutral-900 text-white hover:bg-neutral-800 text-xs font-semibold uppercase tracking-wider px-5 py-2.5 rounded-lg shadow-sm hover:shadow transition-all"
               >
-                Next Step →
+                Next →
               </Button>
             </div>
           </>
@@ -211,24 +211,24 @@ function Onboarding() {
         {step === 1 && (
           <>
             <div>
-              <h2 className="font-serif text-2xl text-neutral-900 tracking-tight">Identify your major commitments</h2>
+              <h2 className="font-serif text-2xl text-neutral-900 tracking-tight">Enter your biggest bill</h2>
               <p className="mt-1.5 text-sm text-neutral-500 leading-relaxed">
-                What is your single largest recurring monthly bill? Rent, housing mortgage, or crucial utility payments.
+                Type your largest monthly bill, such as rent, house payment, or utilities.
               </p>
             </div>
             <div className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Bill Category / Name</label>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Bill name</label>
                 <Input
                   value={billLabel}
                   onChange={(e) => setBillLabel(e.target.value)}
-                  placeholder="e.g. House Rent"
+                  placeholder="e.g. Rent"
                   className="focus-visible:ring-neutral-950"
                 />
               </div>
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-                  Monthly Commitment (₹)
+                  Monthly amount (₹)
                 </label>
                 <AmountInput value={billAmount} onChange={setBillAmount} />
               </div>
@@ -238,7 +238,7 @@ function Onboarding() {
                 onClick={skip}
                 className="text-xs font-semibold uppercase tracking-wider text-neutral-400 hover:text-neutral-900 transition-colors"
               >
-                Skip Setup
+                Skip
               </button>
               <div className="flex gap-2">
                 <button
@@ -251,7 +251,7 @@ function Onboarding() {
                   onClick={addBillAndNext}
                   className="bg-neutral-900 text-white hover:bg-neutral-800 text-xs font-semibold uppercase tracking-wider px-5 py-2.5 rounded-lg shadow-sm hover:shadow transition-all"
                 >
-                  Next Step →
+                  Next →
                 </Button>
               </div>
             </div>
@@ -261,14 +261,14 @@ function Onboarding() {
         {step === 2 && (
           <>
             <div>
-              <h2 className="font-serif text-2xl text-neutral-900 tracking-tight">Catalog active liabilities</h2>
+              <h2 className="font-serif text-2xl text-neutral-900 tracking-tight">Enter your debts</h2>
               <p className="mt-1.5 text-sm text-neutral-500 leading-relaxed">
-                Do you have outstanding loans, credit cards, or personal debt? Tracking them helps establish your paydown timeline.
+                Type any loans, credit cards, or other debts you are paying off.
               </p>
             </div>
             <div className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Lender or Debt Name</label>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Debt name</label>
                 <Input
                   value={debtLabel}
                   onChange={(e) => setDebtLabel(e.target.value)}
@@ -278,13 +278,13 @@ function Onboarding() {
               </div>
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-                  Total Outstanding Balance (₹)
+                  Total debt left (₹)
                 </label>
                 <AmountInput value={debtRemaining} onChange={setDebtRemaining} />
               </div>
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-                  Monthly EMI Amount (₹)
+                  Monthly payment (₹)
                 </label>
                 <AmountInput value={debtEmi} onChange={setDebtEmi} />
               </div>
@@ -294,7 +294,7 @@ function Onboarding() {
                 onClick={skip}
                 className="text-xs font-semibold uppercase tracking-wider text-neutral-400 hover:text-neutral-900 transition-colors"
               >
-                Skip Setup
+                Skip
               </button>
               <div className="flex gap-2">
                 <button
@@ -307,7 +307,7 @@ function Onboarding() {
                   onClick={addDebtAndNext}
                   className="bg-neutral-900 text-white hover:bg-neutral-800 text-xs font-semibold uppercase tracking-wider px-5 py-2.5 rounded-lg shadow-sm hover:shadow transition-all"
                 >
-                  Next Step →
+                  Next →
                 </Button>
               </div>
             </div>
@@ -317,15 +317,15 @@ function Onboarding() {
         {step === 3 && (
           <>
             <div>
-              <h2 className="font-serif text-2xl text-neutral-900 tracking-tight">Prioritize financial reserves</h2>
+              <h2 className="font-serif text-2xl text-neutral-900 tracking-tight">Enter your savings goal</h2>
               <p className="mt-1.5 text-sm text-neutral-500 leading-relaxed">
-                Build a liquidity buffer. Setting up an Emergency Fund protects your commitments and accelerates net worth growth.
+                Type a target you are saving for. An emergency fund is a good start.
               </p>
             </div>
             <div className="space-y-4">
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-                  Liquidity Reserve Name
+                  Goal name
                 </label>
                 <Input
                   value={savingsLabel}
@@ -336,13 +336,13 @@ function Onboarding() {
               </div>
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-                  Target Buffer Amount (₹)
+                  Target amount (₹)
                 </label>
                 <AmountInput value={savingsTarget} onChange={setSavingsTarget} />
               </div>
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-                  Monthly Allocation (₹)
+                  Monthly savings (₹)
                 </label>
                 <AmountInput value={savingsMonthly} onChange={setSavingsMonthly} />
               </div>
@@ -397,7 +397,7 @@ function Onboarding() {
                 onClick={skip}
                 className="text-xs font-semibold uppercase tracking-wider text-neutral-400 hover:text-neutral-900 transition-colors"
               >
-                Skip Setup
+                Skip
               </button>
               <div className="flex gap-2">
                 <button
