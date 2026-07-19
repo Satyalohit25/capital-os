@@ -1,87 +1,125 @@
-# Ship Capital OS as an Offline Windows Desktop App
 
-Your app already stores everything in `localStorage` under `fin-os:v1`, so it's a natural fit for a fully offline desktop build. We'll wrap the existing Vite build in Electron and produce a Windows executable you can double-click on your laptop — no server, no internet required.
+# Capital OS — Vanguard Polish Plan
 
-## What you get
+Scope: eight coordinated UX upgrades. Onboarding already exists; it will be reworked to match the new brief. All work is frontend + store; no schema changes.
 
-- A `Capital OS.exe` (portable folder) that runs on Windows 10/11
-- 100% offline: data lives in the app's local storage on your machine
-- Same UI, same routes, same Editorial design — nothing visual changes
-- Optional native window chrome (custom title bar, app icon, min/max/close)
-- Auto-persistence: your finance data survives restarts (already does, just inside Electron now)
-- Scope for AI either have a api key or a offline model (local processing).
-- Install the required fonts and requirments by mentioning them in installer with user's access.
+---
 
-## Plan
+## 1. Header brand: "Vanguard" centered at the top
 
-### 1. Vite tweak (required for Electron)
+- Remove the "Capital OS · Vanguard Edition" block from the sidebar header.
+- In `src/routes/__root.tsx`, replace the current top bar (which only holds `SidebarTrigger`) with a 3-column header:
+  - Left: `SidebarTrigger` + breadcrumb of current route
+  - Center: wordmark — small uppercase "CAPITAL OS" eyebrow above a serif italic "Vanguard"
+  - Right: theme toggle (sun/moon) + a compact profile chip (avatar + first name) that links to `/settings`
+- Header becomes `sticky top-0 z-40` with a subtle bottom hairline and backdrop blur so it survives scroll.
 
-Set `base: './'` in `vite.config.ts` so built assets load under `file://`. Without this the window is blank white.
+## 2. Profile block at the bottom of the sidebar
 
-### 2. Electron shell
+- Add a `SidebarFooter` in `src/components/app-sidebar.tsx` containing:
+  - Circular avatar (40px). Falls back to initials on a neutral tile if `settings.avatarUrl` is empty.
+  - Two lines: `settings.profileName` + a muted "View profile" caption; entire block is a `Link` to `/settings`.
+  - Collapses to just the avatar when the sidebar is in `icon` mode.
+- Avatar upload lives in Settings (see §3): file → `FileReader` → data URL → `setSettings({ avatarUrl })`. Cheap, offline-safe, persisted by the existing zustand store.
 
-Add two files under `electron/`:
+## 3. Settings page redesign
 
-- `electron/main.cjs` — creates a `BrowserWindow` (1400×900, min 1100×720), loads `dist/index.html`, sets `contextIsolation: true`, `nodeIntegration: false`, disables the default menu bar for a cleaner look, and adds an app icon.
-- `electron/preload.cjs` — empty for now, reserved for future native features (file export, notifications).
+Reorganize `src/routes/settings.tsx` into tabbed sections (shadcn `Tabs`):
 
-Set `"main": "electron/main.cjs"` in `package.json`.
+1. **Profile** — name, avatar upload (drag/drop + click), preferred display name.
+2. **Appearance** — theme radio (Light / Dark / System), density (comfortable / compact), number-format preview.
+3. **Strategy** — snowball vs avalanche toggle, extra-payment slider + numeric input, month selector.
+4. **Data** — Backup (export JSON), Restore (import JSON with confirm dialog), Reset to sample, Clear all (destructive, requires typing "DELETE").
+5. **About** — app version, storage size used, offline-mode note.
 
-### 3. Font handling for offline
+Each destructive action goes through a shadcn `AlertDialog`.
 
-`Instrument Serif` and `Inter` are currently loaded from Google Fonts in `__root.tsx`. Offline that fails and the editorial typography breaks. Fix by:
+## 4. Onboarding rework — questions → live snapshot → skip anytime
 
-- Downloading the two font families as `.woff2` into `src/assets/fonts/`
-- Declaring them via `@font-face` at the top of `src/styles.css`
-- Removing the Google Fonts `<link>` tags from `__root.tsx`
+Rebuild `src/routes/onboarding.tsx` as a 6-step guided wizard, each step a single focused card with a large amount input and inline validation. Steps:
 
-### 4. Windows icon
+1. Name + optional avatar (writes to `settings`).
+2. Monthly income (supports multiple sources with "+ add another").
+3. Fixed bills (rent, EMIs, utilities — repeatable rows in a modal).
+4. Debts (name, balance, EMI, APR — optional).
+5. Savings goals (target + monthly).
+6. Preferences: currency locked to INR, strategy pick (snowball / avalanche), theme.
 
-Generate a `build/icon.ico` (256×256, multi-size) from a simple mark — I'll create a minimal editorial "C" wordmark unless you have art you want to use.
+Persistent UI:
+- Progress bar + step dots at the top.
+- **Live snapshot rail** on the right (desktop) / collapsible sheet (mobile) showing Health Score, Free Cash, Net Worth updating as the user types — same components used on the dashboard so they see the payoff immediately.
+- **Skip setup** button always visible in the top-right; skipping seeds sample data and jumps to dashboard (current behavior, kept).
+- **Finish early** button appears from step 2 onward — writes whatever is filled, marks `onboarded: true`, routes to `/`.
+- Route guard in `__root.tsx`: if `!settings.onboarded` and path is not `/onboarding`, redirect to `/onboarding` on first load only.
 
-### 5. Packaging
+## 5. Dark & Light mode
 
-Use `@electron/packager` (electron-builder needs binaries this environment can't provide). Command produces `electron-release/Capital OS-win32-x64/` containing `Capital OS.exe` + all runtime files. We zip it to `Capital-OS-windows.zip` for download.
+- Extend `src/styles.css` with a full dark palette under `.dark { … }` using the same token names (`--background`, `--foreground`, `--card`, `--muted`, `--border`, `--ring`, brand accents). Register in `@theme inline` (already the pattern).
+- Add `@custom-variant dark (&:where(.dark, .dark *));`.
+- Add `src/lib/theme.ts`: reads `settings.theme`, applies `.dark` class to `<html>`, listens to `prefers-color-scheme` when set to "system".
+- Header + Settings expose the toggle. Charts, cards, sidebar, and the onboarding surfaces all consume tokens so they invert cleanly.
+- Audit hardcoded `bg-neutral-*` / `text-neutral-*` in existing routes and swap for semantic tokens (`bg-background`, `text-foreground`, `bg-muted`, `text-muted-foreground`, `ring-border`). This is the largest single edit — one pass per route file.
 
-### 6. Data safety extras (offline "bells and whistles")
+## 6. Charts & analytics review
 
-Small, high-value additions that make it feel like a real desktop app:
+Audit `src/routes/analytics.tsx`, `reports.tsx`, `forecast.tsx`, and dashboard visualizations. For each chart:
 
-- **Backup / Restore** buttons on the Settings page — export the full `fin-os:v1` store to a `.json` file on disk and re-import it. Protects you if you reinstall Windows or move laptops.
-- **App menu → About / Reset seed / Quit** wired to the existing store actions.
-- **Remember window size & position** across launches (Electron `BrowserWindow` state persisted to a small file in userData).
+- Wrap in a `ChartContainer` (shadcn recharts wrapper) so colors come from tokens and adapt to theme.
+- Use INR compact formatting on axes (`₹1.4L`, `₹12K`) via `Intl.NumberFormat('en-IN', { notation: 'compact' })`.
+- Fix any empty-state — when a user finishes onboarding with sparse data, charts must show a friendly "add more entries to see this trend" panel instead of an empty grid.
+- Add tooltips with full `formatINR` values.
+- Cash-flow forecast: verify EMI drawdown math against `debts[].remaining` and honor `settings.extraPayment` + `strategy`. Add a legend for principal vs interest.
+- Debt-payoff timeline: show months-to-zero per debt under the current strategy; highlight the "focus" debt.
 
-### 7. Verification
+## 7. Number input UX — commas, words, modals
 
-- Run `vite build` and confirm assets are relative-pathed
-- Launch the packaged `.exe` inside the sandbox via Wine? No — cross-run isn't reliable. Instead we sanity-check by running the Electron main against the built `dist/` on Linux headless and confirming it boots (proves the shell + build agree). You then run the produced Windows folder on your laptop.
+- New shared `AmountField` component (upgrade of `AmountInput`):
+  - Formats `1,45,000` (Indian grouping) as the user types.
+  - Shows a muted subtitle beneath: "one lakh forty-five thousand" (via a tiny `numberToIndianWords` helper in `src/lib/finance.ts`).
+  - Increment chips: +1k / +10k / +1L.
+  - Keyboard: arrow-up/down steps by 1000, shift-arrow by 10000.
+- Every "add item" flow (bills, debts, savings, income, credit, investments, assets) opens a shadcn `Dialog` on desktop and a `Sheet` (bottom-anchored) on mobile — powered by a single `EntityDialog` wrapper. Forms use `react-hook-form` + zod for validation and inline errors.
+- `CollectionEditor` gains a "+ Add" button that triggers this dialog instead of the current inline row editing; existing rows get an "Edit" affordance that opens the same dialog pre-filled.
+
+## 8. Responsive layout pass
+
+Header, sidebar, dashboard grids, hub, planner, analytics, settings — all pass the responsive rule (grid + `min-w-0` + `shrink-0`, promote to flex at `sm:`). Specific fixes:
+
+- Sidebar collapses to `icon` mode by default under `md`.
+- Dashboard KPI row: `grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4`.
+- Onboarding snapshot rail becomes a bottom sheet under `md`.
+- Charts use `ResponsiveContainer` at 100% width with a min-height so they don't collapse.
+
+## 9. Paid confirmation for bills & debts
+
+Store already supports `PaymentRecord { paid, paidDate, paidAmount }`. Wire the UI:
+
+- Replace the current mark-paid checkbox (Planner + Hub views) with a **Confirm Payment** dialog:
+  - Fields: date paid (shadcn Datepicker, defaults to today), amount paid (defaults to bill amount or debt EMI), optional note.
+  - On confirm → `markPaid(key, { paid: true, paidDate, paidAmount })`. For debts: also decrement `debts[id].remaining` by `paidAmount` via `updateItem`.
+- Row shows a paid pill: `✓ Paid ₹14,200 on 12 Jul` with an "Undo" link that opens the dialog again or calls `clearPaid`.
+- Planner month view surfaces a **Payments log** panel: reverse-chronological list of confirmations for the current month, exportable as CSV.
+- Dashboard "Due this month" card counts remaining unpaid using the same keys, so confirmations move the needle immediately.
+
+---
 
 ## Technical details
 
-- Runtime: Electron (latest stable), CommonJS main process (`.cjs` because `package.json` is `type: "module"`)
-- Packager: `@electron/packager` with `--platform=win32 --arch=x64`
-- Bundle excludes `src/`, `public/`, `node_modules` dev deps
-- No code signing (unsigned `.exe` — Windows SmartScreen will show a "More info → Run anyway" prompt the first time; signing requires a paid cert, out of scope)
-- Output artifact: `/mnt/documents/Capital-OS-windows.zip` (downloadable)
-- Approx size: ~180–220 MB (Electron runtime; standard for this approach)
+- No new dependencies except `react-hook-form` + `zod` (already common in shadcn projects; add via `bun add` in build mode). Datepicker is the standard shadcn/Calendar+Popover shown in `<shadcn-datepicker>`.
+- Storage stays in the existing zustand `persist` store; bump `version` to 3 with a no-op migrate to avoid clobbering existing users, since only additive fields (`avatarUrl` etc.) change.
+- Route guard uses `beforeLoad` in `__root.tsx` — pure client redirect, no server function.
+- All theming via tokens; no `text-white`/`bg-black` in components.
+- Electron shell needs no changes — the dark class toggles inside the same renderer.
 
-## Out of scope
+## Suggested build order
 
-- Auto-updater (would need a hosted update server)
-- Code signing / notarization
-- MSI/EXE installer (portable folder only — electron-builder needed for installers, incompatible with sandbox)
-- macOS/Linux builds (can add later with the same tooling if you want them)
+1. Theming foundation (tokens + `.dark` + toggle) so every later screen is built theme-correct.
+2. Header + sidebar footer profile.
+3. `AmountField` + `EntityDialog` primitives.
+4. `CollectionEditor` migration to dialogs.
+5. Onboarding rework with live snapshot.
+6. Settings tabs.
+7. Paid-confirmation dialog + payments log.
+8. Charts/analytics audit and responsive sweep.
 
-## Files to create / edit
-
-- edit `vite.config.ts` — add `base: './'`
-- edit `src/routes/__root.tsx` — remove Google Fonts links
-- edit `src/styles.css` — add `@font-face` for local fonts
-- edit `src/routes/settings.tsx` — add Backup / Restore
-- edit `package.json` — add `main`, add electron devDeps
-- create `electron/main.cjs`
-- create `electron/preload.cjs`
-- create `build/icon.ico`
-- create `src/assets/fonts/*.woff2` (4 files: Inter regular+medium, Instrument Serif regular+italic)
-
-Ready to build when you approve.
+Each step is independently shippable and leaves the app in a working state.

@@ -1,15 +1,244 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { LockedModule } from "@/components/locked-module";
+import { PageShell } from "@/components/page-shell";
+import { useFinance } from "@/store/finance-store";
+import {
+  formatINR,
+  formatINRCompact,
+  monthlyIncome,
+  monthlyBills,
+  monthlyEMI,
+  monthlySavings,
+  totalDebt,
+  totalAssetsValue,
+} from "@/lib/finance";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Legend,
+} from "recharts";
 
 export const Route = createFileRoute("/analytics")({
   head: () => ({
-    meta: [{ title: "Analytics — Capital OS" }, { name: "robots", content: "noindex" }],
+    meta: [
+      { title: "Analytics — Capital OS" },
+      {
+        name: "description",
+        content: "Cash-flow breakdown, debt vs assets, and monthly outflow analytics.",
+      },
+    ],
   }),
-  component: () => (
-    <LockedModule
-      phase="Phase 6"
-      name="Analytics"
-      description="Spending ratios, savings rate trend, credit utilization, and forecast accuracy over time."
-    />
-  ),
+  component: Analytics,
 });
+
+const COLORS = ["#166534", "#059669", "#0f766e", "#7c3aed", "#dc2626", "#d97706", "#525252"];
+
+function Analytics() {
+  const {
+    income,
+    bills,
+    debts,
+    creditLines,
+    savings,
+    investments,
+    assets,
+  } = useFinance();
+
+  const mIncome = monthlyIncome(income);
+  const mBills = monthlyBills(bills);
+  const mEmi = monthlyEMI(debts);
+  const mSave = monthlySavings(savings);
+  const free = Math.max(0, mIncome - mBills - mEmi - mSave);
+
+  const cashflowData = [
+    { name: "Bills", value: mBills },
+    { name: "EMIs", value: mEmi },
+    { name: "Savings", value: mSave },
+    { name: "Free Cash", value: free },
+  ].filter((d) => d.value > 0);
+
+  const billsByCategory = Object.entries(
+    bills.reduce<Record<string, number>>((acc, b) => {
+      acc[b.category] = (acc[b.category] || 0) + b.amount;
+      return acc;
+    }, {}),
+  ).map(([name, value]) => ({ name, value }));
+
+  const debtVsAssets = [
+    {
+      name: "Position",
+      Assets: assets.reduce((s, a) => s + a.value, 0),
+      Investments: investments.reduce((s, i) => s + i.currentValue, 0),
+      Savings: savings.reduce((s, g) => s + g.current, 0),
+      Debt: -totalDebt(debts, creditLines),
+    },
+  ];
+
+  const debtList = debts
+    .map((d) => ({ name: d.name, Remaining: d.remaining, EMI: d.emi * 12 }))
+    .sort((a, b) => b.Remaining - a.Remaining);
+
+  const savingsProgress = savings.map((g) => ({
+    name: g.name,
+    Current: g.current,
+    Remaining: Math.max(0, g.target - g.current),
+  }));
+
+  const netWorth = totalAssetsValue(assets, investments, savings) - totalDebt(debts, creditLines);
+  const savingsRate = mIncome > 0 ? (mSave / mIncome) * 100 : 0;
+
+  return (
+    <PageShell
+      eyebrow="Analytics"
+      title="Money, at a glance"
+      description="How your cash flows, what you own vs. owe, and where each rupee goes."
+    >
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <Stat label="Net worth" value={formatINRCompact(netWorth)} />
+        <Stat label="Monthly income" value={formatINRCompact(mIncome)} />
+        <Stat label="Savings rate" value={`${savingsRate.toFixed(1)}%`} />
+        <Stat label="Free cash / mo" value={formatINRCompact(free)} />
+      </div>
+
+      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <Card title="Monthly cash flow">
+          {cashflowData.length === 0 ? (
+            <Empty />
+          ) : (
+            <ResponsiveContainer width="100%" height={260}>
+              <PieChart>
+                <Pie
+                  data={cashflowData}
+                  dataKey="value"
+                  nameKey="name"
+                  outerRadius={90}
+                  innerRadius={50}
+                  paddingAngle={2}
+                >
+                  {cashflowData.map((_, i) => (
+                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip formatter={(v: number) => formatINR(v)} />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          )}
+        </Card>
+
+        <Card title="Bills by category">
+          {billsByCategory.length === 0 ? (
+            <Empty />
+          ) : (
+            <ResponsiveContainer width="100%" height={260}>
+              <BarChart data={billsByCategory}>
+                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                <XAxis dataKey="name" fontSize={11} />
+                <YAxis tickFormatter={(v) => formatINRCompact(v)} fontSize={11} />
+                <Tooltip formatter={(v: number) => formatINR(v)} />
+                <Bar dataKey="value" fill="#166534" radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </Card>
+
+        <Card title="Debt vs. assets">
+          <ResponsiveContainer width="100%" height={260}>
+            <BarChart data={debtVsAssets} stackOffset="sign">
+              <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+              <XAxis dataKey="name" fontSize={11} />
+              <YAxis tickFormatter={(v) => formatINRCompact(v)} fontSize={11} />
+              <Tooltip formatter={(v: number) => formatINR(Math.abs(v))} />
+              <Legend />
+              <Bar dataKey="Assets" stackId="a" fill="#166534" />
+              <Bar dataKey="Investments" stackId="a" fill="#059669" />
+              <Bar dataKey="Savings" stackId="a" fill="#0f766e" />
+              <Bar dataKey="Debt" stackId="a" fill="#dc2626" />
+            </BarChart>
+          </ResponsiveContainer>
+        </Card>
+
+        <Card title="Savings goals progress">
+          {savingsProgress.length === 0 ? (
+            <Empty />
+          ) : (
+            <ResponsiveContainer width="100%" height={260}>
+              <BarChart data={savingsProgress} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                <XAxis type="number" tickFormatter={(v) => formatINRCompact(v)} fontSize={11} />
+                <YAxis type="category" dataKey="name" width={110} fontSize={11} />
+                <Tooltip formatter={(v: number) => formatINR(v)} />
+                <Legend />
+                <Bar dataKey="Current" stackId="a" fill="#166534" />
+                <Bar dataKey="Remaining" stackId="a" fill="#e5e7eb" />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </Card>
+
+        <Card title="Debt breakdown" className="lg:col-span-2">
+          {debtList.length === 0 ? (
+            <Empty />
+          ) : (
+            <ResponsiveContainer width="100%" height={280}>
+              <BarChart data={debtList}>
+                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                <XAxis dataKey="name" fontSize={11} />
+                <YAxis tickFormatter={(v) => formatINRCompact(v)} fontSize={11} />
+                <Tooltip formatter={(v: number) => formatINR(v)} />
+                <Legend />
+                <Bar dataKey="Remaining" fill="#dc2626" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="EMI" fill="#d97706" radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </Card>
+      </div>
+    </PageShell>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl bg-card p-4 ring-1 ring-black/5">
+      <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+        {label}
+      </div>
+      <div className="mt-2 font-serif text-2xl text-foreground">{value}</div>
+    </div>
+  );
+}
+
+function Card({
+  title,
+  children,
+  className = "",
+}: {
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={`rounded-2xl bg-card p-5 ring-1 ring-black/5 ${className}`}>
+      <div className="mb-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+        {title}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function Empty() {
+  return (
+    <div className="grid h-[260px] place-items-center text-sm text-muted-foreground">
+      Add data to see this chart.
+    </div>
+  );
+}

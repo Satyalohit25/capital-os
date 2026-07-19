@@ -28,12 +28,12 @@ const hub = [
 const planning = [
   { title: "Monthly Planner", to: "/planner" },
   { title: "Forecast Engine", to: "/forecast" },
+  { title: "Analytics", to: "/analytics" },
 ];
 
 const locked = [
   { title: "Debt Strategy", to: "/debt-strategy", phase: "Phase 4" },
   { title: "Goal Planner", to: "/goals", phase: "Phase 5" },
-  { title: "Analytics", to: "/analytics", phase: "Phase 6" },
   { title: "Reports", to: "/reports", phase: "Phase 7" },
   { title: "AI Advisor", to: "/advisor", phase: "Phase 8" },
   { title: "History", to: "/history", phase: "Phase 9" },
