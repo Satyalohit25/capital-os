@@ -216,14 +216,14 @@ function ForecastChart({
         <path
           d={toPath(active === "avalanche" ? snow : aval)}
           fill="none"
-          stroke="#9ca3af"
+          stroke="var(--muted-foreground)"
           strokeWidth={1.5}
           strokeDasharray="3 4"
         />
         <path
           d={toPath(active === "snowball" ? snow : aval)}
           fill="none"
-          stroke="#166534"
+          stroke="var(--chart-1)"
           strokeWidth={2.5}
         />
       </svg>
