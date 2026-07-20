@@ -38,7 +38,33 @@ export const Route = createFileRoute("/analytics")({
   component: Analytics,
 });
 
-const COLORS = ["#166534", "#059669", "#0f766e", "#7c3aed", "#dc2626", "#d97706", "#525252"];
+// Theme-aware chart palette — reads live CSS vars so dark/light both look intentional.
+const cssVar = (name: string) =>
+  typeof window !== "undefined"
+    ? getComputedStyle(document.documentElement).getPropertyValue(name).trim() || undefined
+    : undefined;
+const C = {
+  sky: "var(--chart-1)",
+  emerald: "var(--chart-2)",
+  amber: "var(--chart-3)",
+  violet: "var(--chart-4)",
+  rose: "var(--chart-5)",
+  muted: "var(--muted)",
+  grid: "var(--hairline)",
+  axis: "var(--muted-foreground)",
+};
+const PIE_COLORS = [C.sky, C.emerald, C.amber, C.violet, C.rose, "var(--muted-foreground)"];
+void cssVar;
+
+const tooltipStyle = {
+  background: "var(--popover)",
+  border: "1px solid var(--border)",
+  borderRadius: 8,
+  color: "var(--popover-foreground)",
+  fontSize: 12,
+};
+const tooltipLabelStyle = { color: "var(--popover-foreground)" };
+const legendStyle = { color: "var(--muted-foreground)", fontSize: 12 };
 
 function Analytics() {
   const {
