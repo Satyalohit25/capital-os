@@ -38,7 +38,33 @@ export const Route = createFileRoute("/analytics")({
   component: Analytics,
 });
 
-const COLORS = ["#166534", "#059669", "#0f766e", "#7c3aed", "#dc2626", "#d97706", "#525252"];
+// Theme-aware chart palette — reads live CSS vars so dark/light both look intentional.
+const cssVar = (name: string) =>
+  typeof window !== "undefined"
+    ? getComputedStyle(document.documentElement).getPropertyValue(name).trim() || undefined
+    : undefined;
+const C = {
+  sky: "var(--chart-1)",
+  emerald: "var(--chart-2)",
+  amber: "var(--chart-3)",
+  violet: "var(--chart-4)",
+  rose: "var(--chart-5)",
+  muted: "var(--muted)",
+  grid: "var(--hairline)",
+  axis: "var(--muted-foreground)",
+};
+const PIE_COLORS = [C.sky, C.emerald, C.amber, C.violet, C.rose, "var(--muted-foreground)"];
+void cssVar;
+
+const tooltipStyle = {
+  background: "var(--popover)",
+  border: "1px solid var(--border)",
+  borderRadius: 8,
+  color: "var(--popover-foreground)",
+  fontSize: 12,
+};
+const tooltipLabelStyle = { color: "var(--popover-foreground)" };
+const legendStyle = { color: "var(--muted-foreground)", fontSize: 12 };
 
 function Analytics() {
   const {
@@ -123,11 +149,11 @@ function Analytics() {
                   paddingAngle={2}
                 >
                   {cashflowData.map((_, i) => (
-                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                    <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(v: number) => formatINR(v)} />
-                <Legend />
+                <Tooltip formatter={(v: number) => formatINR(v)} contentStyle={tooltipStyle} labelStyle={tooltipLabelStyle} />
+                <Legend wrapperStyle={legendStyle} />
               </PieChart>
             </ResponsiveContainer>
           )}
@@ -139,11 +165,11 @@ function Analytics() {
           ) : (
             <ResponsiveContainer width="100%" height={260}>
               <BarChart data={billsByCategory}>
-                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                <XAxis dataKey="name" fontSize={11} />
-                <YAxis tickFormatter={(v) => formatINRCompact(v)} fontSize={11} />
-                <Tooltip formatter={(v: number) => formatINR(v)} />
-                <Bar dataKey="value" fill="#166534" radius={[6, 6, 0, 0]} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.6} />
+                <XAxis dataKey="name" fontSize={11} stroke="var(--muted-foreground)" />
+                <YAxis tickFormatter={(v) => formatINRCompact(v)} fontSize={11} stroke="var(--muted-foreground)" />
+                <Tooltip formatter={(v: number) => formatINR(v)} contentStyle={tooltipStyle} labelStyle={tooltipLabelStyle} />
+                <Bar dataKey="value" fill="var(--chart-1)" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           )}
@@ -152,15 +178,15 @@ function Analytics() {
         <Card title="Debt vs. assets">
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={debtVsAssets} stackOffset="sign">
-              <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-              <XAxis dataKey="name" fontSize={11} />
-              <YAxis tickFormatter={(v) => formatINRCompact(v)} fontSize={11} />
-              <Tooltip formatter={(v: number) => formatINR(Math.abs(v))} />
-              <Legend />
-              <Bar dataKey="Assets" stackId="a" fill="#166534" />
-              <Bar dataKey="Investments" stackId="a" fill="#059669" />
-              <Bar dataKey="Savings" stackId="a" fill="#0f766e" />
-              <Bar dataKey="Debt" stackId="a" fill="#dc2626" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.6} />
+              <XAxis dataKey="name" fontSize={11} stroke="var(--muted-foreground)" />
+              <YAxis tickFormatter={(v) => formatINRCompact(v)} fontSize={11} stroke="var(--muted-foreground)" />
+              <Tooltip formatter={(v: number) => formatINR(Math.abs(v))} contentStyle={tooltipStyle} labelStyle={tooltipLabelStyle} />
+              <Legend wrapperStyle={legendStyle} />
+              <Bar dataKey="Assets" stackId="a" fill="var(--chart-1)" />
+              <Bar dataKey="Investments" stackId="a" fill="var(--chart-2)" />
+              <Bar dataKey="Savings" stackId="a" fill="var(--chart-2)" />
+              <Bar dataKey="Debt" stackId="a" fill="var(--chart-5)" />
             </BarChart>
           </ResponsiveContainer>
         </Card>
@@ -171,13 +197,13 @@ function Analytics() {
           ) : (
             <ResponsiveContainer width="100%" height={260}>
               <BarChart data={savingsProgress} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                <XAxis type="number" tickFormatter={(v) => formatINRCompact(v)} fontSize={11} />
-                <YAxis type="category" dataKey="name" width={110} fontSize={11} />
-                <Tooltip formatter={(v: number) => formatINR(v)} />
-                <Legend />
-                <Bar dataKey="Current" stackId="a" fill="#166534" />
-                <Bar dataKey="Remaining" stackId="a" fill="#e5e7eb" />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.6} />
+                <XAxis type="number" tickFormatter={(v) => formatINRCompact(v)} fontSize={11} stroke="var(--muted-foreground)" />
+                <YAxis type="category" dataKey="name" width={110} fontSize={11} stroke="var(--muted-foreground)" />
+                <Tooltip formatter={(v: number) => formatINR(v)} contentStyle={tooltipStyle} labelStyle={tooltipLabelStyle} />
+                <Legend wrapperStyle={legendStyle} />
+                <Bar dataKey="Current" stackId="a" fill="var(--chart-1)" />
+                <Bar dataKey="Remaining" stackId="a" fill="var(--muted)" />
               </BarChart>
             </ResponsiveContainer>
           )}
@@ -189,13 +215,13 @@ function Analytics() {
           ) : (
             <ResponsiveContainer width="100%" height={280}>
               <BarChart data={debtList}>
-                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                <XAxis dataKey="name" fontSize={11} />
-                <YAxis tickFormatter={(v) => formatINRCompact(v)} fontSize={11} />
-                <Tooltip formatter={(v: number) => formatINR(v)} />
-                <Legend />
-                <Bar dataKey="Remaining" fill="#dc2626" radius={[6, 6, 0, 0]} />
-                <Bar dataKey="EMI" fill="#d97706" radius={[6, 6, 0, 0]} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.6} />
+                <XAxis dataKey="name" fontSize={11} stroke="var(--muted-foreground)" />
+                <YAxis tickFormatter={(v) => formatINRCompact(v)} fontSize={11} stroke="var(--muted-foreground)" />
+                <Tooltip formatter={(v: number) => formatINR(v)} contentStyle={tooltipStyle} labelStyle={tooltipLabelStyle} />
+                <Legend wrapperStyle={legendStyle} />
+                <Bar dataKey="Remaining" fill="var(--chart-5)" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="EMI" fill="var(--chart-3)" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           )}
@@ -207,7 +233,7 @@ function Analytics() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl bg-card p-4 ring-1 ring-black/5">
+    <div className="rounded-2xl bg-card p-4 ring-1 ring-hairline">
       <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
         {label}
       </div>
@@ -226,7 +252,7 @@ function Card({
   className?: string;
 }) {
   return (
-    <div className={`rounded-2xl bg-card p-5 ring-1 ring-black/5 ${className}`}>
+    <div className={`rounded-2xl bg-card p-5 ring-1 ring-hairline ${className}`}>
       <div className="mb-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
         {title}
       </div>

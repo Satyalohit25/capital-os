@@ -67,33 +67,33 @@ function HubIndex() {
       title="Everything you own & owe"
       description="A calm ledger of your financial surface area. Add, edit, or archive line items — they roll up into the dashboard and forecast."
     >
-      <div className="grid grid-cols-1 gap-px bg-neutral-200 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-px bg-muted sm:grid-cols-2 lg:grid-cols-3">
         {tiles.map((t) => (
           <Link
             key={t.to}
             to={t.to}
-            className="group flex flex-col justify-between bg-neutral-50 p-6 transition-colors hover:bg-white"
+            className="group flex flex-col justify-between bg-background p-6 transition-colors hover:bg-card"
           >
             <div className="mb-8 flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
                 {t.label}
               </span>
-              <span className="text-[10px] text-neutral-400">{t.count} items</span>
+              <span className="text-[10px] text-muted-foreground/80">{t.count} items</span>
             </div>
-            <div className="font-serif text-2xl text-neutral-900 group-hover:text-[--color-accent]">
+            <div className="font-serif text-2xl text-foreground group-hover:text-accent">
               {t.value}
             </div>
           </Link>
         ))}
       </div>
 
-      <div className="mt-10 flex justify-between text-xs text-neutral-400">
+      <div className="mt-10 flex justify-between text-xs text-muted-foreground/80">
         <span>Monthly obligation: {formatINR(monthlyBills(s.bills) + monthlyEMI(s.debts))}</span>
         <button
           onClick={() => {
             if (confirm("Reset all data to sample seed?")) s.resetSeed();
           }}
-          className="uppercase tracking-widest hover:text-neutral-900"
+          className="uppercase tracking-widest hover:text-foreground"
         >
           Reset to sample data
         </button>

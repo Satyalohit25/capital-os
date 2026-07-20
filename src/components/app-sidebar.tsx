@@ -56,9 +56,9 @@ export function AppSidebar() {
       <SidebarMenuButton asChild isActive={isActive(item.to)}>
         <Link
           to={item.to}
-          className="flex items-center gap-3 text-sm text-neutral-600 hover:text-neutral-900 data-[active=true]:bg-neutral-100 data-[active=true]:text-neutral-900"
+          className="flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground data-[active=true]:bg-muted data-[active=true]:text-foreground"
         >
-          <span className="size-1.5 shrink-0 rounded-full border border-neutral-300" />
+          <span className="size-1.5 shrink-0 rounded-full border border-border" />
           <span>{item.title}</span>
         </Link>
       </SidebarMenuButton>
@@ -66,7 +66,7 @@ export function AppSidebar() {
   );
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-neutral-950/5 bg-neutral-50">
+    <Sidebar collapsible="icon" className="border-r border-border bg-background">
       <SidebarContent className="p-4">
         <SidebarGroup>
           <SidebarGroupContent>
@@ -76,7 +76,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild isActive={isActive(item.to)}>
                     <Link
                       to={item.to}
-                      className="flex items-center gap-3 text-sm font-medium text-neutral-900 data-[active=true]:bg-neutral-100"
+                      className="flex items-center gap-3 text-sm font-medium text-foreground data-[active=true]:bg-muted"
                     >
                       <span className="size-4 shrink-0 rounded-full bg-[--color-accent]" />
                       <span>{item.title}</span>
@@ -89,7 +89,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+          <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80">
             Financial Hub
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -98,7 +98,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+          <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80">
             Planning
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -107,7 +107,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+          <SidebarGroupLabel className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80">
             Coming Soon
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -117,12 +117,12 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild isActive={isActive(item.to)}>
                     <Link
                       to={item.to}
-                      className="group flex items-center justify-between gap-3 text-sm text-neutral-400 hover:text-neutral-600"
+                      className="group flex items-center justify-between gap-3 text-sm text-muted-foreground/80 hover:text-muted-foreground"
                     >
                       <span className="flex items-center gap-3">
-                        <span className="h-2 w-16 rounded bg-neutral-200 group-hover:bg-neutral-300" />
+                        <span className="h-2 w-16 rounded bg-muted group-hover:bg-muted" />
                       </span>
-                      <span className="text-[9px] uppercase tracking-widest text-neutral-300">
+                      <span className="text-[9px] uppercase tracking-widest text-muted-foreground/60">
                         {item.phase}
                       </span>
                     </Link>
@@ -140,17 +140,17 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <div className="mt-auto border-t border-neutral-950/5 pt-4">
+        <div className="mt-auto border-t border-border pt-4">
           <Link to="/settings" className="flex items-center gap-3 px-3 hover:opacity-80">
             <Avatar className="size-8">
               {settings.avatarUrl && (
                 <AvatarImage src={settings.avatarUrl} alt={settings.profileName} />
               )}
-              <AvatarFallback className="bg-neutral-200 text-xs text-neutral-600 outline outline-1 -outline-offset-1 outline-black/5">
+              <AvatarFallback className="bg-muted text-xs text-muted-foreground outline outline-1 -outline-offset-1 outline-hairline">
                 {initials}
               </AvatarFallback>
             </Avatar>
-            <div className="text-sm font-medium text-neutral-900">{settings.profileName}</div>
+            <div className="text-sm font-medium text-foreground">{settings.profileName}</div>
           </Link>
         </div>
       </SidebarContent>

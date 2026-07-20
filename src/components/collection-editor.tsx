@@ -92,12 +92,12 @@ export function CollectionEditor<T extends { id: string; [k: string]: any }>({
   return (
     <>
       <div className="mb-6 flex items-center justify-between">
-        <div className="text-sm text-neutral-500">
+        <div className="text-sm text-muted-foreground">
           {items.length} {items.length === 1 ? singular : `${singular}s`}
           {amountField && items.length > 0 && (
-            <span className="ml-3 text-neutral-400">
+            <span className="ml-3 text-muted-foreground/80">
               • Total{" "}
-              <span className="font-medium text-neutral-900">
+              <span className="font-medium text-foreground">
                 {formatINR(items.reduce((s, i) => s + Number(i[amountField] || 0), 0))}
               </span>
             </span>
@@ -107,7 +107,7 @@ export function CollectionEditor<T extends { id: string; [k: string]: any }>({
           <DialogTrigger asChild>
             <Button
               onClick={startAdd}
-              className="bg-neutral-900 text-white hover:bg-neutral-800"
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
               size="sm"
             >
               <Plus className="mr-1 h-4 w-4" /> Add {singular}
@@ -124,7 +124,7 @@ export function CollectionEditor<T extends { id: string; [k: string]: any }>({
                 <div key={f.key} className="space-y-1.5">
                   <Label
                     htmlFor={f.key}
-                    className="text-xs uppercase tracking-wider text-neutral-500"
+                    className="text-xs uppercase tracking-wider text-muted-foreground"
                   >
                     {f.label}
                   </Label>
@@ -165,7 +165,7 @@ export function CollectionEditor<T extends { id: string; [k: string]: any }>({
               <Button variant="ghost" onClick={() => setOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={save} className="bg-neutral-900 text-white hover:bg-neutral-800">
+              <Button onClick={save} className="bg-primary text-primary-foreground hover:bg-primary/90">
                 Save
               </Button>
             </DialogFooter>
@@ -173,9 +173,9 @@ export function CollectionEditor<T extends { id: string; [k: string]: any }>({
         </Dialog>
       </div>
 
-      <div className="divide-y divide-neutral-950/5 border-t border-neutral-950/5">
+      <div className="divide-y divide-border border-t border-border">
         {items.length === 0 && (
-          <div className="py-10 text-center text-sm text-neutral-400">
+          <div className="py-10 text-center text-sm text-muted-foreground/80">
             Nothing here yet. Add your first {singular}.
           </div>
         )}
@@ -187,16 +187,16 @@ export function CollectionEditor<T extends { id: string; [k: string]: any }>({
           return (
             <div key={it.id} className="flex items-center gap-4 py-4">
               <div className="flex-1">
-                <div className="text-sm font-medium text-neutral-900">
+                <div className="text-sm font-medium text-foreground">
                   {String(it[primaryField])}
                 </div>
-                <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-neutral-500">
+                <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
                   {fields
                     .filter((f) => f.key !== primaryField && f.key !== amountField)
                     .slice(0, 3)
                     .map((f) => (
                       <span key={f.key}>
-                        <span className="uppercase tracking-wider text-neutral-400">
+                        <span className="uppercase tracking-wider text-muted-foreground/80">
                           {f.label}:{" "}
                         </span>
                         {f.format ? f.format(it[f.key]) : String(it[f.key])}
@@ -211,7 +211,7 @@ export function CollectionEditor<T extends { id: string; [k: string]: any }>({
                 </div>
               </div>
               {amountField && (
-                <div className="text-right font-serif text-lg tabular-nums text-neutral-900">
+                <div className="text-right font-serif text-lg tabular-nums text-foreground">
                   {formatINR(Number(it[amountField]))}
                 </div>
               )}
@@ -230,7 +230,7 @@ export function CollectionEditor<T extends { id: string; [k: string]: any }>({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-neutral-400 hover:text-neutral-900"
+                  className="h-8 w-8 text-muted-foreground/80 hover:text-foreground"
                   onClick={() => startEdit(it)}
                 >
                   <Pencil className="h-3.5 w-3.5" />
@@ -238,7 +238,7 @@ export function CollectionEditor<T extends { id: string; [k: string]: any }>({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-neutral-400 hover:text-red-600"
+                  className="h-8 w-8 text-muted-foreground/80 hover:text-red-600"
                   onClick={() => removeItem(collectionKey, it.id)}
                 >
                   <Trash2 className="h-3.5 w-3.5" />
@@ -273,7 +273,7 @@ function MarkPaidButton({
       <Button
         variant="ghost"
         size="icon"
-        className="h-8 w-8 text-emerald-600 hover:text-neutral-600"
+        className="h-8 w-8 text-emerald-600 hover:text-muted-foreground"
         onClick={onClear}
         title="Mark unpaid"
       >
@@ -288,7 +288,7 @@ function MarkPaidButton({
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 text-neutral-400 hover:text-emerald-600"
+          className="h-8 w-8 text-muted-foreground/80 hover:text-emerald-600"
           title="Mark paid"
           onClick={() => {
             setDate(today);
@@ -300,9 +300,9 @@ function MarkPaidButton({
       </PopoverTrigger>
       <PopoverContent className="w-64" align="end">
         <div className="space-y-3">
-          <div className="text-sm font-medium text-neutral-900">Confirm payment</div>
+          <div className="text-sm font-medium text-foreground">Confirm payment</div>
           <div className="space-y-1.5">
-            <label className="text-xs uppercase tracking-wider text-neutral-500">Date paid</label>
+            <label className="text-xs uppercase tracking-wider text-muted-foreground">Date paid</label>
             <Input
               type="date"
               value={date}
@@ -311,7 +311,7 @@ function MarkPaidButton({
             />
           </div>
           <div className="space-y-1.5">
-            <label className="text-xs uppercase tracking-wider text-neutral-500">
+            <label className="text-xs uppercase tracking-wider text-muted-foreground">
               Amount paid (₹)
             </label>
             <AmountInput value={amount} onChange={setAmount} />
@@ -322,7 +322,7 @@ function MarkPaidButton({
             </Button>
             <Button
               size="sm"
-              className="bg-neutral-900 text-white hover:bg-neutral-800"
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
               onClick={() => {
                 onConfirm(date, amount);
                 setOpen(false);

@@ -63,22 +63,22 @@ function Planner() {
       <div className="grid grid-cols-1 gap-16 lg:grid-cols-12">
         {/* Waterfall */}
         <section className="lg:col-span-7">
-          <div className="divide-y divide-neutral-950/5 border-t border-neutral-950/5">
+          <div className="divide-y divide-border border-t border-border">
             {rows.map((r) => (
               <div
                 key={r.label}
-                className={`flex items-baseline justify-between py-5 ${r.tone === "final" ? "border-t-2 border-neutral-900" : ""}`}
+                className={`flex items-baseline justify-between py-5 ${r.tone === "final" ? "border-t-2 border-primary" : ""}`}
               >
                 <div>
                   <div
-                    className={`text-sm ${r.tone === "final" ? "font-serif text-lg text-neutral-900" : "font-medium text-neutral-700"}`}
+                    className={`text-sm ${r.tone === "final" ? "font-serif text-lg text-foreground" : "font-medium text-foreground/85"}`}
                   >
                     {r.label}
                   </div>
-                  {r.note && <div className="text-xs text-neutral-400">{r.note}</div>}
+                  {r.note && <div className="text-xs text-muted-foreground/80">{r.note}</div>}
                 </div>
                 <div
-                  className={`font-serif tabular-nums ${r.tone === "final" ? "text-3xl text-[--color-accent]" : r.tone === "in" ? "text-xl text-neutral-900" : "text-xl text-neutral-500"}`}
+                  className={`font-serif tabular-nums ${r.tone === "final" ? "text-3xl text-accent" : r.tone === "in" ? "text-xl text-foreground" : "text-xl text-muted-foreground"}`}
                 >
                   {r.amount < 0 ? "−" : ""}
                   {formatINR(Math.abs(r.amount))}
@@ -95,7 +95,7 @@ function Planner() {
               return (
                 <label
                   key={key}
-                  className="flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 hover:bg-neutral-100"
+                  className="flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 hover:bg-muted"
                 >
                   <div className="flex items-center gap-3">
                     <Checkbox
@@ -111,16 +111,16 @@ function Planner() {
                     />
                     <div>
                       <div
-                        className={`text-sm ${done ? "text-neutral-400 line-through" : "text-neutral-900"}`}
+                        className={`text-sm ${done ? "text-muted-foreground/80 line-through" : "text-foreground"}`}
                       >
                         {d.label}
                       </div>
-                      <div className="text-xs text-neutral-400">
+                      <div className="text-xs text-muted-foreground/80">
                         Due day {d.day} • {d.sub}
                       </div>
                     </div>
                   </div>
-                  <div className="font-serif tabular-nums text-neutral-900">
+                  <div className="font-serif tabular-nums text-foreground">
                     {formatINR(d.amount)}
                   </div>
                 </label>
@@ -132,8 +132,8 @@ function Planner() {
         {/* Calendar */}
         <section className="lg:col-span-5">
           <h3 className="mb-4 font-serif text-xl">Due-date calendar</h3>
-          <div className="rounded-xl bg-white p-4 ring-1 ring-black/5">
-            <div className="mb-2 grid grid-cols-7 gap-1 text-center text-[10px] font-bold uppercase tracking-widest text-neutral-400">
+          <div className="rounded-xl bg-card p-4 ring-1 ring-hairline">
+            <div className="mb-2 grid grid-cols-7 gap-1 text-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
               {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
                 <div key={i}>{d}</div>
               ))}
@@ -149,12 +149,12 @@ function Planner() {
                   <div
                     key={day}
                     className={`aspect-square rounded-md p-1.5 text-left text-[11px] ${
-                      items.length ? "bg-neutral-100 ring-1 ring-black/5" : ""
+                      items.length ? "bg-muted ring-1 ring-hairline" : ""
                     }`}
                   >
-                    <div className="text-neutral-500">{day}</div>
+                    <div className="text-muted-foreground">{day}</div>
                     {items.length > 0 && (
-                      <div className="mt-0.5 truncate text-[9px] font-medium text-[--color-accent]">
+                      <div className="mt-0.5 truncate text-[9px] font-medium text-accent">
                         ● {items.length}
                       </div>
                     )}
@@ -164,11 +164,11 @@ function Planner() {
             </div>
           </div>
 
-          <div className="mt-8 rounded-xl border border-dashed border-neutral-300 p-6">
-            <div className="mb-2 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
+          <div className="mt-8 rounded-xl border border-dashed border-border p-6">
+            <div className="mb-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
               Coming next
             </div>
-            <p className="text-sm text-neutral-500">
+            <p className="text-sm text-muted-foreground">
               Drag-to-reorder priority queue and voice-added expenses arrive in Phase 12
               (Automation).
             </p>
