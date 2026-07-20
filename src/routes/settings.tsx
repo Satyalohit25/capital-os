@@ -64,30 +64,30 @@ function SettingsPage() {
       <div className="max-w-2xl space-y-10">
         {/* Profile */}
         <section>
-          <h2 className="font-serif text-xl text-neutral-900">Profile</h2>
+          <h2 className="font-serif text-xl text-foreground">Profile</h2>
           <div className="mt-4 space-y-4">
             <div>
-              <label className="text-xs uppercase tracking-wider text-neutral-500">
+              <label className="text-xs uppercase tracking-wider text-muted-foreground">
                 Display name
               </label>
               <input
                 type="text"
                 value={state.settings.profileName}
                 onChange={(e) => state.setSettings({ profileName: e.target.value })}
-                className="mt-1 block w-full max-w-xs rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-sm text-neutral-900"
+                className="mt-1 block w-full max-w-xs rounded-md border border-border bg-card px-3 py-1.5 text-sm text-foreground"
               />
             </div>
             <div>
-              <label className="text-xs uppercase tracking-wider text-neutral-500">Avatar</label>
+              <label className="text-xs uppercase tracking-wider text-muted-foreground">Avatar</label>
               <div className="mt-2 flex items-center gap-4">
                 {state.settings.avatarUrl ? (
                   <img
                     src={state.settings.avatarUrl}
                     alt="Avatar"
-                    className="size-12 rounded-full object-cover ring-1 ring-black/10"
+                    className="size-12 rounded-full object-cover ring-1 ring-border"
                   />
                 ) : (
-                  <div className="flex size-12 items-center justify-center rounded-full bg-neutral-200 text-sm font-medium text-neutral-600">
+                  <div className="flex size-12 items-center justify-center rounded-full bg-muted text-sm font-medium text-muted-foreground">
                     {state.settings.profileName
                       .split(" ")
                       .map((w) => w[0])
@@ -127,36 +127,36 @@ function SettingsPage() {
 
         {/* Preferences */}
         <section>
-          <h2 className="font-serif text-xl text-neutral-900">Preferences</h2>
+          <h2 className="font-serif text-xl text-foreground">Preferences</h2>
           <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
             <div>
-              <div className="text-neutral-500">Currency</div>
-              <div className="mt-1 text-neutral-900">Indian Rupees (₹)</div>
+              <div className="text-muted-foreground">Currency</div>
+              <div className="mt-1 text-foreground">Indian Rupees (₹)</div>
             </div>
             <div>
-              <div className="text-neutral-500">Debt strategy</div>
+              <div className="text-muted-foreground">Debt strategy</div>
               <select
                 value={state.settings.strategy}
                 onChange={(e) =>
                   state.setSettings({ strategy: e.target.value as "snowball" | "avalanche" })
                 }
-                className="mt-1 rounded-md border border-neutral-200 bg-white px-2 py-1 text-neutral-900"
+                className="mt-1 rounded-md border border-border bg-card px-2 py-1 text-foreground"
               >
                 <option value="snowball">Snowball (smallest first)</option>
                 <option value="avalanche">Avalanche (highest APR first)</option>
               </select>
             </div>
             <div>
-              <div className="text-neutral-500">Extra payment / month</div>
+              <div className="text-muted-foreground">Extra payment / month</div>
               <input
                 type="number"
                 value={state.settings.extraPayment}
                 onChange={(e) => state.setSettings({ extraPayment: Number(e.target.value) || 0 })}
-                className="mt-1 w-40 rounded-md border border-neutral-200 bg-white px-2 py-1 text-neutral-900"
+                className="mt-1 w-40 rounded-md border border-border bg-card px-2 py-1 text-foreground"
               />
             </div>
             <div>
-              <div className="text-neutral-500">Theme</div>
+              <div className="text-muted-foreground">Theme</div>
               <ToggleGroup
                 type="single"
                 value={state.settings.theme}
@@ -180,8 +180,8 @@ function SettingsPage() {
         </section>
 
         <section>
-          <h2 className="font-serif text-xl text-neutral-900">Backup &amp; restore</h2>
-          <p className="mt-2 text-sm text-neutral-500">
+          <h2 className="font-serif text-xl text-foreground">Backup &amp; restore</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
             Your data lives locally on this device. Export a backup file you can keep somewhere
             safe, or restore from an earlier one.
           </p>
@@ -206,8 +206,8 @@ function SettingsPage() {
         </section>
 
         <section>
-          <h2 className="font-serif text-xl text-neutral-900">Danger zone</h2>
-          <p className="mt-2 text-sm text-neutral-500">
+          <h2 className="font-serif text-xl text-foreground">Danger zone</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
             Reset the app to the sample data seed. Your current data will be lost.
           </p>
           <div className="mt-4 flex gap-3">
@@ -235,7 +235,7 @@ function SettingsPage() {
           </div>
         </section>
 
-        <section className="text-xs text-neutral-400">
+        <section className="text-xs text-muted-foreground/80">
           <div>Capital OS · Vanguard Edition</div>
           <div>Storage key: fin-os:v1 · Runs 100% offline</div>
         </section>

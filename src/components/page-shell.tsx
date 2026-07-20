@@ -14,13 +14,13 @@ export function PageShell({ eyebrow, title, description, actions, children }: Pr
       <header className="mb-12 flex flex-wrap items-end justify-between gap-6">
         <div>
           {eyebrow && (
-            <div className="mb-2 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
+            <div className="mb-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
               {eyebrow}
             </div>
           )}
-          <h1 className="mb-2 text-balance font-serif text-3xl text-neutral-900">{title}</h1>
+          <h1 className="mb-2 text-balance font-serif text-3xl text-foreground">{title}</h1>
           {description && (
-            <p className="max-w-[56ch] text-pretty text-neutral-500">{description}</p>
+            <p className="max-w-[56ch] text-pretty text-muted-foreground">{description}</p>
           )}
         </div>
         {actions}

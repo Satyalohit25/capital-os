@@ -61,9 +61,9 @@ function Dashboard() {
       actions={
         <Link
           to="/forecast"
-          className="flex items-center gap-2 rounded-lg bg-neutral-900 py-2 pl-2 pr-3 text-sm font-medium text-white ring-1 ring-neutral-900"
+          className="flex items-center gap-2 rounded-lg bg-primary py-2 pl-2 pr-3 text-sm font-medium text-primary-foreground ring-1 ring-neutral-900"
         >
-          <span className="size-4 rounded-full bg-white/20" />
+          <span className="size-4 rounded-full bg-card/20" />
           Run Forecast
         </Link>
       }
@@ -75,7 +75,7 @@ function Dashboard() {
           value={
             <span>
               {score}
-              <span className="text-xl italic text-neutral-300">/100</span>
+              <span className="text-xl italic text-muted-foreground/60">/100</span>
             </span>
           }
         />
@@ -85,24 +85,24 @@ function Dashboard() {
       </div>
 
       {/* Forecast Strip */}
-      <div className="mb-16 rounded-2xl bg-neutral-100 p-6 ring-1 ring-black/5">
+      <div className="mb-16 rounded-2xl bg-muted p-6 ring-1 ring-hairline">
         <div className="mb-6 flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-neutral-900">Forecast Projection</h3>
-          <span className="text-xs italic text-neutral-500">
+          <h3 className="text-sm font-semibold text-foreground">Forecast Projection</h3>
+          <span className="text-xs italic text-muted-foreground">
             Strategy: {s.settings.strategy === "snowball" ? "Accelerated Snowball" : "Avalanche"}
           </span>
         </div>
-        <div className="grid grid-cols-2 gap-px bg-neutral-200 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-px bg-muted md:grid-cols-4">
           {projections.map((p, i) => (
             <div
               key={p.m}
-              className={`bg-neutral-100 py-4 ${i === 0 ? "pr-6" : i === projections.length - 1 ? "pl-6 md:text-right" : "px-6"}`}
+              className={`bg-muted py-4 ${i === 0 ? "pr-6" : i === projections.length - 1 ? "pl-6 md:text-right" : "px-6"}`}
             >
-              <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
                 +{p.m} Month{p.m > 1 ? "s" : ""}
               </span>
               <div
-                className={`mt-1 font-serif text-lg ${i === 2 ? "italic text-[--color-accent]" : "text-neutral-900"}`}
+                className={`mt-1 font-serif text-lg ${i === 2 ? "italic text-accent" : "text-foreground"}`}
               >
                 {formatINR(p.v)}
               </div>
@@ -114,10 +114,10 @@ function Dashboard() {
       {/* Two column */}
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
         <section className="lg:col-span-7">
-          <h2 className="mb-6 font-serif text-xl text-neutral-900">Active Liabilities</h2>
-          <div className="divide-y divide-neutral-950/5 border-t border-neutral-950/5">
+          <h2 className="mb-6 font-serif text-xl text-foreground">Active Liabilities</h2>
+          <div className="divide-y divide-border border-t border-border">
             {s.debts.length === 0 && (
-              <div className="py-8 text-sm text-neutral-500">
+              <div className="py-8 text-sm text-muted-foreground">
                 No debts recorded.{" "}
                 <Link to="/hub/debts" className="underline">
                   Add one
@@ -127,11 +127,11 @@ function Dashboard() {
             {s.debts.map((d) => (
               <div key={d.id} className="flex items-center justify-between py-5">
                 <div className="flex-1">
-                  <div className="text-sm font-medium text-neutral-900">{d.name}</div>
-                  <div className="mt-1 text-xs text-neutral-500">
+                  <div className="text-sm font-medium text-foreground">{d.name}</div>
+                  <div className="mt-1 text-xs text-muted-foreground">
                     {d.lender} • {d.apr}% APR
                   </div>
-                  <div className="mt-3 h-1 w-48 overflow-hidden rounded-full bg-neutral-200">
+                  <div className="mt-3 h-1 w-48 overflow-hidden rounded-full bg-muted">
                     <div
                       className="h-full bg-[--color-accent]"
                       style={{ width: `${progress(d)}%` }}
@@ -139,11 +139,11 @@ function Dashboard() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-serif text-lg text-neutral-900">
+                  <div className="font-serif text-lg text-foreground">
                     {formatINR(d.remaining)}
                   </div>
                   <div
-                    className={`mt-1 text-[10px] font-bold uppercase tracking-wider ${d.priority === 1 ? "text-red-600" : "text-neutral-400"}`}
+                    className={`mt-1 text-[10px] font-bold uppercase tracking-wider ${d.priority === 1 ? "text-red-600" : "text-muted-foreground/80"}`}
                   >
                     EMI: {formatINR(d.emi)}
                   </div>
@@ -155,19 +155,19 @@ function Dashboard() {
 
         <section className="space-y-12 lg:col-span-5">
           <div>
-            <h2 className="mb-6 font-serif text-xl text-neutral-900">Upcoming Commitments</h2>
-            <div className="rounded-xl bg-white p-6 ring-1 ring-black/5">
+            <h2 className="mb-6 font-serif text-xl text-foreground">Upcoming Commitments</h2>
+            <div className="rounded-xl bg-card p-6 ring-1 ring-hairline">
               <div className="space-y-4">
                 {dues.map((d) => (
                   <div key={d.id + d.kind} className="flex items-start justify-between">
                     <div>
-                      <div className="text-sm font-medium text-neutral-900">{d.label}</div>
-                      <div className="text-xs capitalize text-neutral-500">
+                      <div className="text-sm font-medium text-foreground">{d.label}</div>
+                      <div className="text-xs capitalize text-muted-foreground">
                         {new Date().toLocaleDateString("en-IN", { month: "short" })} {d.day} •{" "}
                         {d.sub}
                       </div>
                     </div>
-                    <div className="text-sm font-medium tabular-nums text-neutral-900">
+                    <div className="text-sm font-medium tabular-nums text-foreground">
                       {formatINR(d.amount)}
                     </div>
                   </div>
@@ -178,38 +178,38 @@ function Dashboard() {
 
           {ef && (
             <div>
-              <h2 className="mb-4 font-serif text-xl text-neutral-900">Financial Reserve</h2>
+              <h2 className="mb-4 font-serif text-xl text-foreground">Financial Reserve</h2>
               <div className="flex items-baseline gap-2">
-                <div className="font-serif text-3xl text-neutral-900">{formatINR(ef.current)}</div>
-                <span className="text-xs font-bold uppercase tracking-tighter text-neutral-400">
+                <div className="font-serif text-3xl text-foreground">{formatINR(ef.current)}</div>
+                <span className="text-xs font-bold uppercase tracking-tighter text-muted-foreground/80">
                   Emergency Fund
                 </span>
               </div>
-              <div className="mt-4 h-2 rounded-full bg-neutral-100 outline outline-1 outline-neutral-950/5">
+              <div className="mt-4 h-2 rounded-full bg-muted outline outline-1 outline-neutral-950/5">
                 <div
-                  className="h-full rounded-full bg-neutral-900"
+                  className="h-full rounded-full bg-primary"
                   style={{ width: `${Math.min(100, (ef.current / ef.target) * 100)}%` }}
                 />
               </div>
-              <p className="mt-3 text-xs leading-relaxed text-neutral-500">
+              <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
                 Goal: {formatINR(ef.target)}. You are currently at {efMonths.toFixed(1)} months of
                 runway.
               </p>
             </div>
           )}
 
-          <div className="rounded-xl border border-dashed border-neutral-300 p-6">
-            <div className="mb-2 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
+          <div className="rounded-xl border border-dashed border-border p-6">
+            <div className="mb-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
               This Month
             </div>
             <div className="flex items-baseline justify-between">
               <div>
-                <div className="font-serif text-2xl text-neutral-900">{formatINR(inc)}</div>
-                <div className="text-xs text-neutral-500">Income in</div>
+                <div className="font-serif text-2xl text-foreground">{formatINR(inc)}</div>
+                <div className="text-xs text-muted-foreground">Income in</div>
               </div>
               <div className="text-right">
-                <div className="font-serif text-2xl text-neutral-900">{formatINR(inc - cash)}</div>
-                <div className="text-xs text-neutral-500">Committed out</div>
+                <div className="font-serif text-2xl text-foreground">{formatINR(inc - cash)}</div>
+                <div className="text-xs text-muted-foreground">Committed out</div>
               </div>
             </div>
           </div>
@@ -222,10 +222,10 @@ function Dashboard() {
 function Kpi({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="space-y-1">
-      <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
+      <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
         {label}
       </span>
-      <div className="font-serif text-4xl text-neutral-900">{value}</div>
+      <div className="font-serif text-4xl text-foreground">{value}</div>
     </div>
   );
 }

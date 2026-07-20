@@ -207,7 +207,7 @@ function Analytics() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl bg-card p-4 ring-1 ring-black/5">
+    <div className="rounded-2xl bg-card p-4 ring-1 ring-hairline">
       <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
         {label}
       </div>
@@ -226,7 +226,7 @@ function Card({
   className?: string;
 }) {
   return (
-    <div className={`rounded-2xl bg-card p-5 ring-1 ring-black/5 ${className}`}>
+    <div className={`rounded-2xl bg-card p-5 ring-1 ring-hairline ${className}`}>
       <div className="mb-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
         {title}
       </div>

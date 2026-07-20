@@ -18,17 +18,17 @@ import { AppSidebar } from "@/components/app-sidebar";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-neutral-50 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="font-serif text-7xl text-neutral-900">404</h1>
-        <h2 className="mt-4 font-serif text-xl text-neutral-900">Page not found</h2>
-        <p className="mt-2 text-sm text-neutral-500">
+        <h1 className="font-serif text-7xl text-foreground">404</h1>
+        <h2 className="mt-4 font-serif text-xl text-foreground">Page not found</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
           The page you're looking for doesn't exist or has been moved.
         </p>
         <div className="mt-6">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
+            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
           >
             Go home
           </Link>
@@ -46,10 +46,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-neutral-50 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="font-serif text-xl text-neutral-900">This page didn't load</h1>
-        <p className="mt-2 text-sm text-neutral-500">
+        <h1 className="font-serif text-xl text-foreground">This page didn't load</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
           Something went wrong on our end. You can try refreshing or head back home.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
@@ -58,13 +58,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
+            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
           >
             Try again
           </button>
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-md border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-900 hover:bg-neutral-50"
+            className="inline-flex items-center justify-center rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
           >
             Go home
           </a>
@@ -149,20 +149,20 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <SidebarProvider>
-        <div className="flex min-h-screen w-full bg-neutral-50 text-neutral-900">
+        <div className="flex min-h-screen w-full bg-background text-foreground">
           <AppSidebar />
           <div className="flex-1">
-            <header className="flex h-14 items-center border-b border-neutral-950/5 px-3">
+            <header className="flex h-14 items-center border-b border-border px-3">
               <SidebarTrigger className="md:hidden" />
               <div className="flex-1 text-center">
-                <span className="text-[10px] font-semibold uppercase tracking-widest text-neutral-400">
+                <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/80">
                   Capital OS ·{" "}
                 </span>
-                <span className="font-serif text-lg italic text-neutral-900">Vanguard Edition</span>
+                <span className="font-serif text-lg italic text-foreground">Vanguard Edition</span>
               </div>
               <button
                 onClick={cycleTheme}
-                className="ml-auto rounded-md p-1.5 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-900"
+                className="ml-auto rounded-md p-1.5 text-muted-foreground/80 hover:bg-muted hover:text-foreground"
                 title={`Theme: ${theme}`}
               >
                 <ThemeIcon className="h-4 w-4" />
