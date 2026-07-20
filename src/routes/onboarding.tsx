@@ -54,14 +54,14 @@ function Onboarding() {
 
   const skip = () => {
     // Restore seed data so user has something to explore, mark onboarded
-    store.resetSeed();
-    store.setSettings({ onboarded: true });
+    resetSeed();
+    setSettings({ onboarded: true });
     navigate({ to: "/" });
   };
 
   const addIncomeAndNext = () => {
     if (incomeAmount > 0) {
-      store.addItem("income", {
+      addItem("income", {
         id: newId(),
         name: incomeLabel || "Income",
         amount: incomeAmount,
@@ -74,7 +74,7 @@ function Onboarding() {
 
   const addBillAndNext = () => {
     if (billAmount > 0) {
-      store.addItem("bills", {
+      addItem("bills", {
         id: newId(),
         name: billLabel || "Bill",
         amount: billAmount,
@@ -88,7 +88,7 @@ function Onboarding() {
 
   const addDebtAndNext = () => {
     if (debtRemaining > 0) {
-      store.addItem("debts", {
+      addItem("debts", {
         id: newId(),
         name: debtLabel || "Debt",
         lender: "",
@@ -106,7 +106,7 @@ function Onboarding() {
 
   const finish = () => {
     if (savingsTarget > 0) {
-      store.addItem("savings", {
+      addItem("savings", {
         id: newId(),
         name: savingsLabel || "Goal",
         target: savingsTarget,
@@ -116,33 +116,20 @@ function Onboarding() {
       });
     }
     // Collections already contain only user-entered data (seed was cleared on mount)
-    store.setSettings({ onboarded: true });
+    setSettings({ onboarded: true });
     navigate({ to: "/" });
   };
 
-  const summaryIncome = useFinance.getState().income;
-  const summaryBills = useFinance.getState().bills;
-  const summaryDebts = useFinance.getState().debts;
-  const summaryCredit = useFinance.getState().creditLines;
-  const summarySavings = useFinance.getState().savings;
-  const summaryAssets = useFinance.getState().assets;
-  const summaryInvestments = useFinance.getState().investments;
-
   const score = healthScore({
-    income: summaryIncome,
-    bills: summaryBills,
-    debts: summaryDebts,
-    creditLines: summaryCredit,
-    savings: summarySavings,
+    income,
+    bills,
+    debts,
+    creditLines,
+    savings,
   });
-  const cash = availableCash(summaryIncome, summaryBills, summaryDebts, summaryCredit);
-  const nw = netWorth(
-    summaryAssets,
-    summaryInvestments,
-    summarySavings,
-    summaryDebts,
-    summaryCredit,
-  );
+  const cash = availableCash(income, bills, debts, creditLines);
+  const nw = netWorth(assets, investments, savings, debts, creditLines);
+
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4">
