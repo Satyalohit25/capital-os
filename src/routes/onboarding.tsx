@@ -324,7 +324,7 @@ function Onboarding() {
               </div>
 
               {/* Summary preview */}
-              {(incomeAmount > 0 || summaryIncome.length > 0) && (
+              {(incomeAmount > 0 || income.length > 0) && (
                 <div className="mt-2 rounded-xl bg-neutral-50 p-4 ring-1 ring-black/5 text-sm">
                   <div className="mb-2 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
                     Your snapshot
