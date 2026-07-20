@@ -12,14 +12,27 @@ export const Route = createFileRoute("/onboarding")({
 });
 
 function Onboarding() {
-  const store = useFinance();
+  const addItem = useFinance((s) => s.addItem);
+  const setSettings = useFinance((s) => s.setSettings);
+  const clearCollections = useFinance((s) => s.clearCollections);
+  const resetSeed = useFinance((s) => s.resetSeed);
+
+  const income = useFinance((s) => s.income);
+  const bills = useFinance((s) => s.bills);
+  const debts = useFinance((s) => s.debts);
+  const creditLines = useFinance((s) => s.creditLines);
+  const savings = useFinance((s) => s.savings);
+  const investments = useFinance((s) => s.investments);
+  const assets = useFinance((s) => s.assets);
+
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
 
   // Clear seed data on mount — user starts fresh, only their entered data accumulates
   useEffect(() => {
-    store.clearCollections();
-  }, [store]);
+    clearCollections();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Step 0: Income
   const [incomeLabel, setIncomeLabel] = useState("Primary Salary");
