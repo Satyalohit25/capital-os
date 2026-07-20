@@ -63,7 +63,7 @@ function Forecast() {
       title="Path to zero"
       description={`At current pacing you clear all liabilities in ${totalMonths} months — ${debtFreeDate(totalMonths)}.`}
       actions={
-        <div className="flex overflow-hidden rounded-lg ring-1 ring-neutral-200">
+        <div className="flex overflow-hidden rounded-lg ring-1 ring-border">
           {(["snowball", "avalanche"] as const).map((v) => (
             <button
               key={v}
@@ -236,7 +236,7 @@ function ForecastChart({
           <span className="inline-block h-0.5 w-6 bg-[--color-accent]" /> {active}
         </span>
         <span className="flex items-center gap-2 text-muted-foreground/80">
-          <span className="inline-block h-0 w-6 border-t border-dashed border-neutral-400" />{" "}
+          <span className="inline-block h-0 w-6 border-t border-dashed border-muted-foreground/60" />{" "}
           {active === "snowball" ? "avalanche" : "snowball"}
         </span>
       </div>

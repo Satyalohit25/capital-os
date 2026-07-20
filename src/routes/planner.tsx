@@ -67,7 +67,7 @@ function Planner() {
             {rows.map((r) => (
               <div
                 key={r.label}
-                className={`flex items-baseline justify-between py-5 ${r.tone === "final" ? "border-t-2 border-neutral-900" : ""}`}
+                className={`flex items-baseline justify-between py-5 ${r.tone === "final" ? "border-t-2 border-primary" : ""}`}
               >
                 <div>
                   <div

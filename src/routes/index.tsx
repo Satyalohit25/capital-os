@@ -61,7 +61,7 @@ function Dashboard() {
       actions={
         <Link
           to="/forecast"
-          className="flex items-center gap-2 rounded-lg bg-primary py-2 pl-2 pr-3 text-sm font-medium text-primary-foreground ring-1 ring-neutral-900"
+          className="flex items-center gap-2 rounded-lg bg-primary py-2 pl-2 pr-3 text-sm font-medium text-primary-foreground ring-1 ring-primary"
         >
           <span className="size-4 rounded-full bg-card/20" />
           Run Forecast
@@ -185,7 +185,7 @@ function Dashboard() {
                   Emergency Fund
                 </span>
               </div>
-              <div className="mt-4 h-2 rounded-full bg-muted outline outline-1 outline-neutral-950/5">
+              <div className="mt-4 h-2 rounded-full bg-muted outline outline-1 outline-hairline">
                 <div
                   className="h-full rounded-full bg-primary"
                   style={{ width: `${Math.min(100, (ef.current / ef.target) * 100)}%` }}
