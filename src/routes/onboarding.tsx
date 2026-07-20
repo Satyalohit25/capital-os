@@ -12,14 +12,27 @@ export const Route = createFileRoute("/onboarding")({
 });
 
 function Onboarding() {
-  const store = useFinance();
+  const addItem = useFinance((s) => s.addItem);
+  const setSettings = useFinance((s) => s.setSettings);
+  const clearCollections = useFinance((s) => s.clearCollections);
+  const resetSeed = useFinance((s) => s.resetSeed);
+
+  const income = useFinance((s) => s.income);
+  const bills = useFinance((s) => s.bills);
+  const debts = useFinance((s) => s.debts);
+  const creditLines = useFinance((s) => s.creditLines);
+  const savings = useFinance((s) => s.savings);
+  const investments = useFinance((s) => s.investments);
+  const assets = useFinance((s) => s.assets);
+
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
 
   // Clear seed data on mount — user starts fresh, only their entered data accumulates
   useEffect(() => {
-    store.clearCollections();
-  }, [store]);
+    clearCollections();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Step 0: Income
   const [incomeLabel, setIncomeLabel] = useState("Primary Salary");
@@ -41,14 +54,14 @@ function Onboarding() {
 
   const skip = () => {
     // Restore seed data so user has something to explore, mark onboarded
-    store.resetSeed();
-    store.setSettings({ onboarded: true });
+    resetSeed();
+    setSettings({ onboarded: true });
     navigate({ to: "/" });
   };
 
   const addIncomeAndNext = () => {
     if (incomeAmount > 0) {
-      store.addItem("income", {
+      addItem("income", {
         id: newId(),
         name: incomeLabel || "Income",
         amount: incomeAmount,
@@ -61,7 +74,7 @@ function Onboarding() {
 
   const addBillAndNext = () => {
     if (billAmount > 0) {
-      store.addItem("bills", {
+      addItem("bills", {
         id: newId(),
         name: billLabel || "Bill",
         amount: billAmount,
@@ -75,7 +88,7 @@ function Onboarding() {
 
   const addDebtAndNext = () => {
     if (debtRemaining > 0) {
-      store.addItem("debts", {
+      addItem("debts", {
         id: newId(),
         name: debtLabel || "Debt",
         lender: "",
@@ -93,7 +106,7 @@ function Onboarding() {
 
   const finish = () => {
     if (savingsTarget > 0) {
-      store.addItem("savings", {
+      addItem("savings", {
         id: newId(),
         name: savingsLabel || "Goal",
         target: savingsTarget,
@@ -103,33 +116,20 @@ function Onboarding() {
       });
     }
     // Collections already contain only user-entered data (seed was cleared on mount)
-    store.setSettings({ onboarded: true });
+    setSettings({ onboarded: true });
     navigate({ to: "/" });
   };
 
-  const summaryIncome = useFinance.getState().income;
-  const summaryBills = useFinance.getState().bills;
-  const summaryDebts = useFinance.getState().debts;
-  const summaryCredit = useFinance.getState().creditLines;
-  const summarySavings = useFinance.getState().savings;
-  const summaryAssets = useFinance.getState().assets;
-  const summaryInvestments = useFinance.getState().investments;
-
   const score = healthScore({
-    income: summaryIncome,
-    bills: summaryBills,
-    debts: summaryDebts,
-    creditLines: summaryCredit,
-    savings: summarySavings,
+    income,
+    bills,
+    debts,
+    creditLines,
+    savings,
   });
-  const cash = availableCash(summaryIncome, summaryBills, summaryDebts, summaryCredit);
-  const nw = netWorth(
-    summaryAssets,
-    summaryInvestments,
-    summarySavings,
-    summaryDebts,
-    summaryCredit,
-  );
+  const cash = availableCash(income, bills, debts, creditLines);
+  const nw = netWorth(assets, investments, savings, debts, creditLines);
+
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-4">
@@ -324,7 +324,7 @@ function Onboarding() {
               </div>
 
               {/* Summary preview */}
-              {(incomeAmount > 0 || summaryIncome.length > 0) && (
+              {(incomeAmount > 0 || income.length > 0) && (
                 <div className="mt-2 rounded-xl bg-neutral-50 p-4 ring-1 ring-black/5 text-sm">
                   <div className="mb-2 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
                     Your snapshot
